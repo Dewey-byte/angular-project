@@ -1,0 +1,10 @@
+<h2>Register</h2>
+<form (submit)="register(); $event.preventDefault()">
+  <input [(ngModel)]="userData.Full_Name" name="Full_Name" placeholder="Full Name" required><br>
+  <input [(ngModel)]="userData.Email" name="Email" placeholder="Email" required><br>
+  <input [(ngModel)]="userData.Username" name="Username" placeholder="Username" required><br>
+  <input [(ngModel)]="userData.Password" name="Password" placeholder="Password" type="password" required><br>
+  <input [(ngModel)]="userData.Contact_Number" name="Contact_Number" placeholder="Contact Number"><br>
+  <input [(ngModel)]="userData.Address" name="Address" placeholder="Address"><br>
+  <button type="submit">Register</button>
+</form>

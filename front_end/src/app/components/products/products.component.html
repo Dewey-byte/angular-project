@@ -1,0 +1,9 @@
+<div class="p-4">
+  <h2 class="text-xl font-bold mb-2">Products</h2>
+  <div *ngFor="let p of products" class="border p-2 mb-2 rounded">
+    <p><strong>{{ p.Product_Name }}</strong></p>
+    <p>Category: {{ p.Category }}</p>
+    <p>Price: ₱{{ p.Price }}</p>
+    <p>Stock: {{ p.Stock_Quantity }}</p>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+<h2>Login</h2>
+<form (submit)="login(); $event.preventDefault()">
+  <input [(ngModel)]="credentials.Username" name="Username" placeholder="Username" required><br>
+  <input [(ngModel)]="credentials.Password" name="Password" type="password" placeholder="Password" required><br>
+  <button type="submit">Login</button>
+</form>
