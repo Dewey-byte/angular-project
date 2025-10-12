@@ -7,13 +7,11 @@ import { CommonModule } from '@angular/common';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  standalone: true,
   imports: [FormsModule, CommonModule]
 })
 export class LoginComponent {
-  credentials = {
-    Username: '',
-    Password: ''
-  };
+  credentials = { Username: '', Password: '' };
 
   constructor(private authService: AuthService) {}
 
@@ -21,9 +19,11 @@ export class LoginComponent {
     this.authService.login(this.credentials).subscribe({
       next: (res) => {
         alert(res.message || 'Login successful!');
+        console.log('Token:', res.token);
       },
       error: (err) => {
-        alert(err.error?.message || 'Login failed!');
+        alert(err.error?.error || 'Login failed!');
+        console.error(err);
       }
     });
   }

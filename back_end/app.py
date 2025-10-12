@@ -24,7 +24,7 @@ db = MySQLdb.connect(
 
 
 # ---------------- REGISTER ----------------
-@app.route("/register", methods=["POST"])
+@app.route("/register", methods=['POST'])
 def register():
     data = request.get_json()
     fullname = data.get("Full_Name")
@@ -47,7 +47,7 @@ def register():
 
 
 # ---------------- LOGIN ----------------
-@app.route("/login", methods=["POST"])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     data = request.get_json()
     username = data.get("Username")

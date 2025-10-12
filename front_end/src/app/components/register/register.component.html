@@ -1,5 +1,5 @@
 <h2>Register</h2>
-<form (submit)="register(); $event.preventDefault()">
+<form (ngSubmit)="register()" #registerForm="ngForm" novalidate>
   <input [(ngModel)]="userData.Full_Name" name="Full_Name" placeholder="Full Name" required><br>
   <input [(ngModel)]="userData.Email" name="Email" placeholder="Email" required><br>
   <input [(ngModel)]="userData.Username" name="Username" placeholder="Username" required><br>
