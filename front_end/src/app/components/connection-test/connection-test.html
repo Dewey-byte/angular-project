@@ -1,0 +1,5 @@
+<div style="text-align:center; margin-top: 50px;">
+  <h2>Backend Connection Test</h2>
+  <button (click)="checkConnection()">Check Connection</button>
+  <p [style.color]="isConnected ? 'green' : 'red'">{{ message }}</p>
+</div>

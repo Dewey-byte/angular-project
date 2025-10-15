@@ -1,0 +1,93 @@
+.landing-container {
+  font-family: 'Poppins', sans-serif;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 3rem;
+  background-color: #1f2937;
+  color: white;
+}
+
+.header .logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  margin: 0 1rem;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #facc15;
+}
+
+.hero {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  text-align: center;
+  padding: 5rem 2rem;
+  flex: 1;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero h1 span {
+  color: #facc15;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.hero button {
+  background-color: #facc15;
+  color: #1f2937;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.hero button:hover {
+  transform: scale(1.05);
+}
+
+.features {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 3rem 2rem;
+  gap: 2rem;
+}
+
+.feature {
+  background: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  width: 300px;
+  text-align: center;
+}
+
+.footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #1f2937;
+  color: white;
+}

@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-
+import { ConnectionTest } from './components/connection-test/connection-test';
+import { LandingPage } from './components/landing-page/landing-page';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  imports: [LandingPage, ConnectionTest],
+  template: `<app-landing-page></app-landing-page> `
 })
-export class AppComponent {
-  title = 'Bookstore Management System';
-}
+export class AppComponent {}

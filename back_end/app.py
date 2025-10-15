@@ -1,30 +1,32 @@
-from flask import Flask, jsonify, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import (
-    JWTManager, create_access_token, jwt_required, get_jwt_identity
-)
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import MySQLdb
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 bcrypt = Bcrypt(app)
 
 # Secret key for JWT
-app.config['JWT_SECRET_KEY'] = 'your_secret_key_here'
+app.config["JWT_SECRET_KEY"] = "supersecretkey"
 jwt = JWTManager(app)
 
-# Database connection
+# Connect to your MySQL database
 db = MySQLdb.connect(
     host="localhost",
     user="root",
-    passwd="",    # your password if any
+    passwd="",  # put your MySQL password if you have one
     db="librotrackdb"
 )
 
+# ---------------- HOME ----------------
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"message": "Flask backend is running!"})
 
 # ---------------- REGISTER ----------------
-@app.route("/register", methods=['POST'])
+@app.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
     fullname = data.get("Full_Name")
@@ -45,9 +47,8 @@ def register():
 
     return jsonify({"message": "User registered successfully!"}), 201
 
-
 # ---------------- LOGIN ----------------
-@app.route('/login', methods=['POST', 'GET'])
+@app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
     username = data.get("Username")
@@ -69,20 +70,12 @@ def login():
     else:
         return jsonify({"error": "Invalid credentials"}), 401
 
-
-# ---------------- PROTECTED PROFILE ----------------
+# ---------------- PROFILE ----------------
 @app.route("/profile", methods=["GET"])
 @jwt_required()
 def profile():
     current_user = get_jwt_identity()
     return jsonify({"message": "Welcome!", "user": current_user})
-
-
-# ---------------- ROOT ----------------
-@app.route("/")
-def index():
-    return "<h3>Flask API running — use /register or /login endpoints.</h3>"
-
 
 if __name__ == "__main__":
     app.run(debug=True)
