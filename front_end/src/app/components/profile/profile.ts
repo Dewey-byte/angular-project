@@ -5,7 +5,7 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-profile',
   templateUrl: './profile.html',
 })
-export class ProfileComponent implements OnInit {
+export class Profile implements OnInit {
   user: any;
 
   constructor(private auth: AuthService) {}

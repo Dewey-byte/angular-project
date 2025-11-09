@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { ConnectionTest } from './components/connection-test/connection-test';
-import { LandingPage } from './components/landing-page/landing-page';
+import { RouterOutlet } from '@angular/router';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [LandingPage, ConnectionTest],
-  template: `<app-connection-test></app-connection-test> `
+  imports: [RouterOutlet],
+  template: `<router-outlet></router-outlet>`
 })
 export class AppComponent {}

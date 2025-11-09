@@ -1,10 +1,93 @@
-<h2>Register</h2>
-<form (ngSubmit)="register()" #registerForm="ngForm" novalidate>
-  <input [(ngModel)]="userData.Full_Name" name="Full_Name" placeholder="Full Name" required><br>
-  <input [(ngModel)]="userData.Email" name="Email" placeholder="Email" required><br>
-  <input [(ngModel)]="userData.Username" name="Username" placeholder="Username" required><br>
-  <input [(ngModel)]="userData.Password" name="Password" placeholder="Password" type="password" required><br>
-  <input [(ngModel)]="userData.Contact_Number" name="Contact_Number" placeholder="Contact Number"><br>
-  <input [(ngModel)]="userData.Address" name="Address" placeholder="Address"><br>
-  <button type="submit">Register</button>
-</form>
+<div class="register-container">
+  <h2>Register to <span>LibroTrack</span></h2>
+
+  <form (ngSubmit)="register()" #registerForm="ngForm" novalidate>
+    <!-- Full Name -->
+    <div class="form-group">
+      <input
+        type="text"
+        name="Full_Name"
+        [(ngModel)]="userData.Full_Name"
+        placeholder="Full Name"
+        required
+        #fullName="ngModel"
+      />
+      <div class="error" *ngIf="fullName.invalid && fullName.touched">
+        Full name is required
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <input
+        type="email"
+        name="Email"
+        [(ngModel)]="userData.Email"
+        placeholder="Email"
+        required
+        #email="ngModel"
+      />
+      <div class="error" *ngIf="email.invalid && email.touched">
+        Valid email is required
+      </div>
+    </div>
+
+    <!-- Username -->
+    <div class="form-group">
+      <input
+        type="text"
+        name="Username"
+        [(ngModel)]="userData.Username"
+        placeholder="Username"
+        required
+        #username="ngModel"
+      />
+      <div class="error" *ngIf="username.invalid && username.touched">
+        Username is required
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <input
+        type="password"
+        name="Password"
+        [(ngModel)]="userData.Password"
+        placeholder="Password"
+        required
+        minlength="6"
+        #password="ngModel"
+      />
+      <div class="error" *ngIf="password.invalid && password.touched">
+        Password must be at least 6 characters
+      </div>
+    </div>
+
+    <!-- Contact Number -->
+    <div class="form-group">
+      <input
+        type="text"
+        name="Contact_Number"
+        [(ngModel)]="userData.Contact_Number"
+        placeholder="Contact Number"
+      />
+    </div>
+
+    <!-- Address -->
+    <div class="form-group">
+      <input
+        type="text"
+        name="Address"
+        [(ngModel)]="userData.Address"
+        placeholder="Address"
+      />
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" [disabled]="registerForm.invalid">Register</button>
+  </form>
+
+  <p class="login-link">
+    Already have an account? <a routerLink="/login">Login here</a>
+  </p>
+</div>

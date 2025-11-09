@@ -1,19 +1,46 @@
-<form (ngSubmit)="login()" #loginForm="ngForm">
-  <input
-    type="text"
-    name="Username"
-    [(ngModel)]="credentials.Username"
-    placeholder="Username"
-    required
-  />
+<div class="login-container">
+  <h2>Login to <span>LibroTrack</span></h2>
 
-  <input
-    type="password"
-    name="Password"
-    [(ngModel)]="credentials.Password"
-    placeholder="Password"
-    required
-  />
+  <form (ngSubmit)="login()" #loginForm="ngForm" novalidate>
+    <!-- Username -->
+    <div class="form-group">
+      <input
+        type="text"
+        name="username"
+        [(ngModel)]="credentials.username"
+        placeholder="Username"
+        required
+        #username="ngModel"
+      />
+      <div class="error" *ngIf="username.invalid && username.touched">
+        Username is required
+      </div>
+    </div>
 
-  <button type="submit">Login</button>
-</form>
+    <!-- Password -->
+    <div class="form-group">
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="credentials.password"
+        placeholder="Password"
+        required
+        minlength="6"
+        #password="ngModel"
+      />
+      <div class="error" *ngIf="password.invalid && password.touched">
+        Password must be at least 6 characters
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" [disabled]="loginForm.invalid">
+      Login
+    </button>
+  </form>
+
+  <p class="register-link">
+    Don’t have an account?
+    <a routerLink="/register">Register here</a>
+  </p>
+</div>

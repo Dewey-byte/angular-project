@@ -1,29 +1,41 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { NgIf } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http'; // <-- add this
+import { AuthService } from '../../services/auth.service'; // adjust path
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule]
+  imports: [FormsModule, NgIf, HttpClientModule, RouterModule], // <-- include HttpClientModule
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  credentials = { Username: '', Password: '' };
+  credentials = {
+    username: '',
+    password: ''
+  };
 
-  constructor(private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   login() {
+    if (!this.credentials.username || !this.credentials.password) {
+      alert('Please fill out all fields.');
+      return;
+    }
+
     this.authService.login(this.credentials).subscribe({
-      next: (res) => {
-        alert(res.message || 'Login successful!');
-        console.log('Token:', res.token);
+      next: (response) => {
+        if (response.token) {
+          localStorage.setItem('token', response.token);
+        }
+        alert(response.message || 'Login successful!');
+        this.router.navigate(['/']); // redirect after login
       },
       error: (err) => {
-        alert(err.error?.error || 'Login failed!');
-        console.error(err);
+        alert(err.error?.message || 'Login failed!');
       }
     });
   }

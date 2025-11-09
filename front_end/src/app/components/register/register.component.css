@@ -1,0 +1,86 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #a58158d0, #5c3715);
+  font-family: 'Poppins', sans-serif;
+}
+
+.register-container {
+  background-color: #fff;
+  padding: 2.5rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 2rem;
+  color: #7C4B3F;
+  margin-bottom: 1rem;
+}
+
+h2 span {
+  color: #facc15;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #7C4B3F;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  border-color: #facc15;
+  outline: none;
+  box-shadow: 0 0 6px #facc15;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #7C4B3F;
+  border: none;
+  border-radius: 8px;
+  color: #F5D263;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #5c3715;
+  transform: scale(1.03);
+}
+
+.error {
+  color: red;
+  font-size: 0.85rem;
+  text-align: left;
+  margin-top: 4px;
+}
+
+.login-link {
+  margin-top: 1rem;
+}
+
+.login-link a {
+  color: #7C4B3F;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
