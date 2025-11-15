@@ -8,7 +8,7 @@
   background: linear-gradient(135deg, #a58158d0, #5c3715);
   font-family: 'Poppins', sans-serif;
   color: #fff;
-  padding: 20px;
+  padding: 10px;
 }
 
 /* Title */
@@ -42,7 +42,7 @@ form {
 
 .form-group input {
   width: 100%;
-  padding: 12px 15px;
+  padding: 10px 10px;
   border: 2px solid #7C4B3F;
   border-radius: 8px;
   font-size: 1rem;

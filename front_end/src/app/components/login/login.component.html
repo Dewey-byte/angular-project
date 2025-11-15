@@ -12,9 +12,12 @@
         required
         #username="ngModel"
       />
-      <div class="error" *ngIf="username.invalid && username.touched">
-        Username is required
-      </div>
+
+      @if(username.invalid && username.touched){
+        <div class="error">
+          Username is required
+        </div>
+      }
     </div>
 
     <!-- Password -->

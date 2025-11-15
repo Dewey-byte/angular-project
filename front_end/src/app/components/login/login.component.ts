@@ -8,7 +8,7 @@ import { AuthService } from '../../services/auth.service'; // adjust path
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, NgIf, HttpClientModule, RouterModule], // <-- include HttpClientModule
+  imports: [FormsModule, HttpClientModule, RouterModule, NgIf], // <-- include HttpClientModule
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })

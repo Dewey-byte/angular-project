@@ -12,9 +12,12 @@
         required
         #fullName="ngModel"
       />
-      <div class="error" *ngIf="fullName.invalid && fullName.touched">
-        Full name is required
-      </div>
+
+      @if(fullName.invalid && fullName.touched){
+        <div class="error">
+          Full name is required
+        </div>
+      }
     </div>
 
     <!-- Email -->
