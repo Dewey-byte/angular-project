@@ -1,35 +1,58 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth.service'; // adjust path accordingly
+import { AuthService } from '../../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NgIf } from '@angular/common';
-
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
-  standalone: true,       // make it standalone
-  imports: [FormsModule, RouterModule, HttpClientModule, NgIf] // import necessary modules
+  standalone: true,
+  imports: [FormsModule, RouterModule, HttpClientModule, NgIf]
 })
 export class RegisterComponent {
+
+
+  @Output() closeModalEvent = new EventEmitter<void>();
+
+  isOpen = false;
+
   userData = {
-    Full_Name: '',
-    Email: '',
-    Username: '',
-    Password: '',
-    Contact_Number: '',
-    Address: ''
+    full_name: '',
+    email: '',
+    username: '',
+    password: '',
+    contact_number: '',
+    address: ''
   };
 
   constructor(private router: Router, private authService: AuthService) {}
+
+  @Output() switchToLogin = new EventEmitter<void>();
+
+openLogin() {
+  this.switchToLogin.emit();
+  this.closeModal();
+}
+
+
+  openModal() {
+    this.isOpen = true;
+  }
+
+  closeModal() {
+    this.isOpen = false;
+    this.closeModalEvent.emit();
+  }
 
   register() {
     this.authService.register(this.userData).subscribe({
       next: (response) => {
         alert(response.message || 'Registration successful!');
-        this.router.navigate(['/']); // optional: redirect to login after registration
+        this.closeModal();
+        this.router.navigate(['/']);
       },
       error: (err) => {
         alert(err.error?.message || 'Registration failed!');

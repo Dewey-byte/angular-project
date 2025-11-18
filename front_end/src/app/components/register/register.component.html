@@ -1,96 +1,23 @@
-<div class="register-container">
-  <h2>Register to <span>LibroTrack</span></h2>
+<div class="modal" *ngIf="isOpen">
+  <div class="modal-content">
+    <button class="close" (click)="closeModal()">&times;</button>
 
-  <form (ngSubmit)="register()" #registerForm="ngForm" novalidate>
-    <!-- Full Name -->
-    <div class="form-group">
-      <input
-        type="text"
-        name="Full_Name"
-        [(ngModel)]="userData.Full_Name"
-        placeholder="Full Name"
-        required
-        #fullName="ngModel"
-      />
+    <h2 class="modal-title">Register</h2>
 
-      @if(fullName.invalid && fullName.touched){
-        <div class="error">
-          Full name is required
-        </div>
-      }
-    </div>
+    <form (ngSubmit)="register()" class="modal-form">
+      <input type="text" name="full_name" placeholder="Full Name" [(ngModel)]="userData.full_name" class="modal-input">
+      <input type="email" name="email" placeholder="Email" [(ngModel)]="userData.email" class="modal-input">
+      <input type="text" name="username" placeholder="Username" [(ngModel)]="userData.username" class="modal-input">
+      <input type="password" name="password" placeholder="Password" [(ngModel)]="userData.password" class="modal-input">
+      <input type="text" name="contact_number" placeholder="Contact Number" [(ngModel)]="userData.contact_number" class="modal-input">
+      <input type="text" name="address" placeholder="Address" [(ngModel)]="userData.address" class="modal-input">
+      <button type="submit" class="modal-btn">Register</button>
+    </form>
 
-    <!-- Email -->
-    <div class="form-group">
-      <input
-        type="email"
-        name="Email"
-        [(ngModel)]="userData.Email"
-        placeholder="Email"
-        required
-        #email="ngModel"
-      />
-      <div class="error" *ngIf="email.invalid && email.touched">
-        Valid email is required
-      </div>
-    </div>
-
-    <!-- Username -->
-    <div class="form-group">
-      <input
-        type="text"
-        name="Username"
-        [(ngModel)]="userData.Username"
-        placeholder="Username"
-        required
-        #username="ngModel"
-      />
-      <div class="error" *ngIf="username.invalid && username.touched">
-        Username is required
-      </div>
-    </div>
-
-    <!-- Password -->
-    <div class="form-group">
-      <input
-        type="password"
-        name="Password"
-        [(ngModel)]="userData.Password"
-        placeholder="Password"
-        required
-        minlength="6"
-        #password="ngModel"
-      />
-      <div class="error" *ngIf="password.invalid && password.touched">
-        Password must be at least 6 characters
-      </div>
-    </div>
-
-    <!-- Contact Number -->
-    <div class="form-group">
-      <input
-        type="text"
-        name="Contact_Number"
-        [(ngModel)]="userData.Contact_Number"
-        placeholder="Contact Number"
-      />
-    </div>
-
-    <!-- Address -->
-    <div class="form-group">
-      <input
-        type="text"
-        name="Address"
-        [(ngModel)]="userData.Address"
-        placeholder="Address"
-      />
-    </div>
-
-    <!-- Submit -->
-    <button type="submit" [disabled]="registerForm.invalid">Register</button>
-  </form>
-
-  <p class="login-link">
-    Already have an account? <a routerLink="/login">Login here</a>
-  </p>
+    <p class="modal-footer">
+      Already have an account?
+      <button (click)="openLogin()" class="modal-link">Login here</button>
+    </p>
+  </div>
 </div>
+

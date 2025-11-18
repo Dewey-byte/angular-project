@@ -1,24 +1,49 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { NgIf } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http'; // <-- add this
-import { AuthService } from '../../services/auth.service'; // adjust path
+import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, RouterModule, NgIf], // <-- include HttpClientModule
+  imports: [FormsModule, HttpClientModule, RouterModule, NgIf],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+
+
+  @Output() close = new EventEmitter<void>();
+  isOpen = false;
+
   credentials = {
     username: '',
     password: ''
   };
 
   constructor(private router: Router, private authService: AuthService) {}
+
+
+  @Output() switchToRegister = new EventEmitter<void>();
+
+  openRegister() {
+
+    this.switchToRegister.emit();
+
+  }
+
+
+
+  openModal() {
+    this.isOpen = true;
+  }
+
+  closeModal() {
+    this.isOpen = false;
+    this.close.emit();
+  }
 
   login() {
     if (!this.credentials.username || !this.credentials.password) {
@@ -32,7 +57,8 @@ export class LoginComponent {
           localStorage.setItem('token', response.token);
         }
         alert(response.message || 'Login successful!');
-        this.router.navigate(['/']); // redirect after login
+        this.closeModal(); // CLOSE MODAL AFTER LOGIN
+        // remove this.router.navigate(['/']);  // remove page reroute
       },
       error: (err) => {
         alert(err.error?.message || 'Login failed!');

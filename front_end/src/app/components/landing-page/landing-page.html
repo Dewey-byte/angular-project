@@ -1,27 +1,63 @@
 <div class="landing-container">
+  <!-- HEADER -->
   <header class="header">
     <div class="logo">
       <img src="assets/logo.png" alt="LibroTrack Logo" class="logo-img">
-      <!-- Optional: keep text next to the image -->
-      <span>LibroTrack</span>
+      <span class="logo-text">LibroTrack</span>
     </div>
+
     <nav class="nav-links">
-      <a routerLink="/">Home</a>
-      <a routerLink="/login">Login</a>
-      <a routerLink="/register">Register</a>
+      <a (click)="scrollToProducts()">Shop</a>
+      <a (click)="openLogin()" class="logbtn">Login</a>
+      <a routerLink="/profile">Profile</a>
+      <a routerLink="/cart">🛒</a>
     </nav>
   </header>
 
+  <!-- HERO SECTION -->
   <section class="hero">
     <div class="hero-content">
       <h1>Welcome to <span>LibroTrack</span></h1>
       <p>Your smart online bookstore and e-commerce platform.</p>
-      <button routerLink="/register">Start Shopping</button>
+      <button (click)="scrollToProducts()">Start Shopping</button>
     </div>
   </section>
 
+  <!-- PRODUCTS SECTION -->
+  <section id="products" class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Title -->
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold mb-4" style="color: #1e293b;">Our Products</h2>
+        <p class="text-lg" style="color: #64748b;">Carefully selected books and stationery for every reader and writer</p>
+      </div>
+
+      <!-- Category Filters -->
+      <div class="flex justify-center mb-8">
+        <div class="flex space-x-4 p-1 rounded-lg" style="background-color: #f1f5f9;">
+          <button onclick="filterProducts('all')" class="category-filter active px-6 py-2 rounded-md font-medium transition-colors" style="background-color: #3b82f6; color: #ffffff;">All Products</button>
+          <button onclick="filterProducts('Books')" class="category-filter px-6 py-2 rounded-md font-medium transition-colors" style="color: #374151;">📚 Books</button>
+          <button onclick="filterProducts('Stationery')" class="category-filter px-6 py-2 rounded-md font-medium transition-colors" style="color: #374151;">✏️ Stationery</button>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Products will be dynamically loaded here -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-products" class="text-center py-16 hidden">
+        <span class="text-6xl mb-4 block">🏪</span>
+        <h3 class="text-xl font-semibold mb-2" style="color: #374151;">No Products Available</h3>
+        <p style="color: #6b7280;">Check back soon for new arrivals!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES SECTION -->
   <section class="features">
-    <div class="feature">
+    <div class="feature" routerLink="/products">
       <h3>🛒 Browse Products</h3>
       <p>Explore a wide range of books and stationery for every need.</p>
     </div>
@@ -35,7 +71,21 @@
     </div>
   </section>
 
+  <!-- FOOTER -->
   <footer class="footer">
     <p>&copy; 2025 LibroTrack | All Rights Reserved.</p>
   </footer>
+
+  <!-- MODALS -->
+  <app-login #loginModal (switchToRegister)="openRegister()"></app-login>
+  <app-register #registerModal (switchToLogin)="openLogin()"></app-register>
 </div>
+
+
+
+
+
+
+
+
+

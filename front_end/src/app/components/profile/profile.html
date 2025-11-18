@@ -1,1 +1,15 @@
-<p>profile works!</p>
+<div class="profile-card" *ngIf="user">
+  <h2>Your Profile</h2>
+
+  <p><strong>User ID:</strong> {{ user.User_ID }}</p>
+  <p><strong>Username:</strong> {{ user.Username }}</p>
+  <p><strong>Full Name:</strong> {{ user.Full_Name }}</p>
+  <p><strong>Email:</strong> {{ user.Email }}</p>
+  <p><strong>Role:</strong> {{ user.Role }}</p>
+  <p><strong>Contact:</strong> {{ user.Contact_Number }}</p>
+  <p><strong>Address:</strong> {{ user.Address }}</p>
+</div>
+
+<div *ngIf="!user">
+  <p>Loading user profile...</p>
+</div>

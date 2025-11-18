@@ -1,49 +1,19 @@
-<div class="login-container">
-  <h2>Login to <span>LibroTrack</span></h2>
+<div class="modal" *ngIf="isOpen">
+  <div class="modal-content">
+    <button class="close" (click)="closeModal()">&times;</button>
 
-  <form (ngSubmit)="login()" #loginForm="ngForm" novalidate>
-    <!-- Username -->
-    <div class="form-group">
-      <input
-        type="text"
-        name="username"
-        [(ngModel)]="credentials.username"
-        placeholder="Username"
-        required
-        #username="ngModel"
-      />
+    <h2 class="modal-title">Login</h2>
 
-      @if(username.invalid && username.touched){
-        <div class="error">
-          Username is required
-        </div>
-      }
-    </div>
+    <form (ngSubmit)="login()" class="modal-form">
+      <input type="text" name="username" placeholder="Username" [(ngModel)]="credentials.username" class="modal-input">
+      <input type="password" name="password" placeholder="Password" [(ngModel)]="credentials.password" class="modal-input">
+      <button type="submit" class="modal-btn">Login</button>
+    </form>
 
-    <!-- Password -->
-    <div class="form-group">
-      <input
-        type="password"
-        name="password"
-        [(ngModel)]="credentials.password"
-        placeholder="Password"
-        required
-        minlength="6"
-        #password="ngModel"
-      />
-      <div class="error" *ngIf="password.invalid && password.touched">
-        Password must be at least 6 characters
-      </div>
-    </div>
-
-    <!-- Submit -->
-    <button type="submit" [disabled]="loginForm.invalid">
-      Login
-    </button>
-  </form>
-
-  <p class="register-link">
-    Don’t have an account?
-    <a routerLink="/register">Register here</a>
-  </p>
+    <p class="modal-footer">
+      Don't have an account?
+      <button (click)="openRegister()" class="modal-link">Sign up here</button>
+    </p>
+  </div>
 </div>
+
