@@ -1,15 +1,32 @@
-<div class="profile-card" *ngIf="user">
-  <h2>Your Profile</h2>
+<!-- Profile Backdrop -->
+<div class="profile-backdrop" [class.open]="isProfileOpen" (click)="closeProfile()"></div>
 
-  <p><strong>User ID:</strong> {{ user.User_ID }}</p>
-  <p><strong>Username:</strong> {{ user.Username }}</p>
-  <p><strong>Full Name:</strong> {{ user.Full_Name }}</p>
-  <p><strong>Email:</strong> {{ user.Email }}</p>
-  <p><strong>Role:</strong> {{ user.Role }}</p>
-  <p><strong>Contact:</strong> {{ user.Contact_Number }}</p>
-  <p><strong>Address:</strong> {{ user.Address }}</p>
-</div>
+<!-- Profile Modal -->
+<div class="profile-modal" [class.open]="isProfileOpen" (click)="$event.stopPropagation()">
 
-<div *ngIf="!user">
-  <p>Loading user profile...</p>
+  <!-- Header -->
+  <div class="profile-header">
+    <h2>👤 Your Profile</h2>
+    <button class="close-btn" (click)="closeProfile()">✖</button>
+  </div>
+
+  <!-- Profile Info -->
+  <div class="profile-content">
+    <div class="profile-picture">
+      <img [src]="user?.image || 'assets/default-profile.png'" alt="Profile Picture">
+    </div>
+
+    <div class="profile-details">
+      <h3>{{ user.name }}</h3>
+      <p>{{ user.email }}</p>
+      <p>{{ user.contactNumber }}</p>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="profile-actions">
+    <button class="edit-btn" (click)="editProfile()">Edit Profile</button>
+  <!-- <button class="logout-btn" (click)="logout()">Logout</button>-->
+  </div>
+
 </div>

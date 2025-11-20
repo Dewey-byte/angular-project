@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
+
   private apiUrl = 'http://127.0.0.1:5000';
 
 
@@ -19,6 +20,11 @@ export class AuthService {
   login(credentials: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(`${this.apiUrl}/auth/login`, credentials, { headers });
+  }
+
+  logout(credentials: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post(`${this.apiUrl}/auth/logout`, credentials, { headers });
   }
 
   getProfile(): Observable<any> {

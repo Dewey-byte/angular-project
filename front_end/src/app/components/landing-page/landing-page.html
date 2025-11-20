@@ -9,8 +9,9 @@
     <nav class="nav-links">
       <a (click)="scrollToProducts()">Shop</a>
       <a (click)="openLogin()" class="logbtn">Login</a>
-      <a routerLink="/profile">Profile</a>
-      <a routerLink="/cart">🛒</a>
+      <a>Profile</a>
+      <a (click)="cartModal.openCart()">🛒</a>
+
     </nav>
   </header>
 
@@ -57,7 +58,7 @@
 
   <!-- FEATURES SECTION -->
   <section class="features">
-    <div class="feature" routerLink="/products">
+    <div class="feature" >
       <h3>🛒 Browse Products</h3>
       <p>Explore a wide range of books and stationery for every need.</p>
     </div>
@@ -79,6 +80,9 @@
   <!-- MODALS -->
   <app-login #loginModal (switchToRegister)="openRegister()"></app-login>
   <app-register #registerModal (switchToLogin)="openLogin()"></app-register>
+  <app-cart #cartModal></app-cart>
+
+
 </div>
 
 
