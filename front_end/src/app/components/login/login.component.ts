@@ -14,27 +14,22 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
 
-
   @Output() close = new EventEmitter<void>();
+  @Output() switchToRegister = new EventEmitter<void>();
+
   isOpen = false;
+  showPassword = false;
 
   credentials = {
-    username: '',
+    email: '',
     password: ''
   };
 
   constructor(private router: Router, private authService: AuthService) {}
 
-
-  @Output() switchToRegister = new EventEmitter<void>();
-
   openRegister() {
-
     this.switchToRegister.emit();
-
   }
-
-
 
   openModal() {
     this.isOpen = true;
@@ -45,8 +40,12 @@ export class LoginComponent {
     this.close.emit();
   }
 
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
   login() {
-    if (!this.credentials.username || !this.credentials.password) {
+    if (!this.credentials.email || !this.credentials.password) {
       alert('Please fill out all fields.');
       return;
     }
@@ -58,7 +57,6 @@ export class LoginComponent {
         }
         alert(response.message || 'Login successful!');
         this.closeModal(); // CLOSE MODAL AFTER LOGIN
-        // remove this.router.navigate(['/']);  // remove page reroute
       },
       error: (err) => {
         alert(err.error?.message || 'Login failed!');

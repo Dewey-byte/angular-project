@@ -18,6 +18,8 @@ export class RegisterComponent {
   @Output() closeModalEvent = new EventEmitter<void>();
 
   isOpen = false;
+  showPassword = false;
+
 
   userData = {
     full_name: '',
@@ -45,6 +47,10 @@ openLogin() {
   closeModal() {
     this.isOpen = false;
     this.closeModalEvent.emit();
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   register() {

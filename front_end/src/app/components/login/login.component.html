@@ -5,8 +5,23 @@
     <h2 class="modal-title">Login</h2>
 
     <form (ngSubmit)="login()" class="modal-form">
-      <input type="text" name="username" placeholder="Username" [(ngModel)]="credentials.username" class="modal-input">
-      <input type="password" name="password" placeholder="Password" [(ngModel)]="credentials.password" class="modal-input">
+      <input type="text" name="email" placeholder="Email" [(ngModel)]="credentials.email" class="modal-input">
+
+      <!-- Password input with eye icon -->
+      <div class="password-wrapper">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          name="password"
+          placeholder="Password"
+          [(ngModel)]="credentials.password"
+          class="modal-input">
+
+        <button type="button" class="show-password-btn" (click)="togglePassword()">
+          {{ showPassword ? '👁️' : '🙈' }}
+        </button>
+      </div>
+
+
       <button type="submit" class="modal-btn">Login</button>
     </form>
 
@@ -16,4 +31,3 @@
     </p>
   </div>
 </div>
-

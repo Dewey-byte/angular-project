@@ -8,7 +8,20 @@
       <input type="text" name="full_name" placeholder="Full Name" [(ngModel)]="userData.full_name" class="modal-input">
       <input type="email" name="email" placeholder="Email" [(ngModel)]="userData.email" class="modal-input">
       <input type="text" name="username" placeholder="Username" [(ngModel)]="userData.username" class="modal-input">
-      <input type="password" name="password" placeholder="Password" [(ngModel)]="userData.password" class="modal-input">
+
+      <!-- Password field with show/hide -->
+      <div class="password-wrapper">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          name="password"
+          placeholder="Password"
+          [(ngModel)]="userData.password"
+          class="modal-input">
+        <button type="button" class="show-password-btn" (click)="togglePassword()">
+          {{ showPassword ? '👁️' : '🙈' }}
+        </button>
+      </div>
+
       <input type="text" name="contact_number" placeholder="Contact Number" [(ngModel)]="userData.contact_number" class="modal-input">
       <input type="text" name="address" placeholder="Address" [(ngModel)]="userData.address" class="modal-input">
       <button type="submit" class="modal-btn">Register</button>

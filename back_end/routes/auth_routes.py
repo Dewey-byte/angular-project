@@ -12,13 +12,13 @@ def login():
         return '', 200
 
     data = request.get_json()
-    username = data.get("username")
+    email = data.get("email")
     password = data.get("password")
 
     conn = get_db()
     cursor = conn.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT * FROM Users WHERE Username = %s", (username,))
+    cursor.execute("SELECT * FROM Users WHERE Email = %s", (email,))
     user = cursor.fetchone()
 
     cursor.close()

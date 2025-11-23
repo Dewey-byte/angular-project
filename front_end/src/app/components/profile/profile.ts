@@ -1,64 +1,87 @@
-import { Component, OnInit } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.html',
-  imports: [FormsModule, RouterModule, HttpClientModule],
-  styleUrls: ['./profile.css']
+  styleUrls: ['./profile.css'],
+  imports: [NgIf, FormsModule]
 })
-export class Profile implements OnInit {
-
+export class Profile {
+  isOpen = false;
   user: any = null;
-  isProfileOpen: boolean = false;  // <-- Controls modal open/close
+  editing = false;
+  formData: any = {};
+  selectedFile: File | null = null;
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
+  openProfile() {
+    this.isOpen = true;
     this.loadUser();
   }
 
-  // Load user profile from AuthService
   loadUser() {
     this.authService.getProfile().subscribe({
       next: (res) => {
         this.user = res.user;
-        console.log("User loaded:", this.user);
+        this.formData = { ...res.user };
       },
-      error: (err) => {
-        console.log("Profile error:", err);
-      }
+      error: (err) => console.error(err)
     });
   }
 
-  // Open profile modal
-  openProfile() {
-    this.isProfileOpen = true;
+  editProfile() { this.editing = true; }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0] || null;
+
+    if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => this.formData.image = e.target.result;
+      reader.readAsDataURL(this.selectedFile); // show preview
+    }
   }
 
-  // Close profile modal
-  closeProfile() {
-    this.isProfileOpen = false;
+  saveProfile() {
+    const formData = new FormData();
+    formData.append("Full_Name", this.formData.Full_Name);
+    formData.append("Email", this.formData.Email);
+    formData.append("Contact_Number", this.formData.Contact_Number);
+    formData.append("Address", this.formData.Address);
+
+    // send old image in case no new file
+    formData.append("Current_Image", this.user.image || "");
+
+    if (this.selectedFile) {
+      formData.append("image", this.selectedFile);
+    }
+
+    this.authService.updateProfile(formData).subscribe({
+      next: (res) => {
+        this.loadUser();
+        this.editing = false;
+      },
+      error: (err) => console.error(err)
+    });
   }
 
-  // Edit profile action
-  editProfile() {
-    // Navigate to profile edit page (or open edit form)
-    this.router.navigate(['/profile/edit']);
+
+  cancelEdit() {
+    this.editing = false;
+    this.formData = { ...this.user };
+    this.selectedFile = null;
   }
 
-  // Logout action
-  //logout() {
-    //this.authService.logout();
-    //this.router.navigate(['/login']);
-  //}
-
-  // Optional: handle modal click so it doesn't close when clicking inside
-  stopPropagation(event: Event) {
-    event.stopPropagation();
+  logout() {
+    this.authService.logout();
+    this.closeProfile();
+    this.router.navigate(['/']);
   }
+
+  closeProfile() { this.isOpen = false; this.editing = false; }
+  stopPropagation(event: Event) { event.stopPropagation(); }
 }

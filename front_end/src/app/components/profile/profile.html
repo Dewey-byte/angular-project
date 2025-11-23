@@ -1,32 +1,40 @@
-<!-- Profile Backdrop -->
-<div class="profile-backdrop" [class.open]="isProfileOpen" (click)="closeProfile()"></div>
+<div class="profile-modal-backdrop" *ngIf="isOpen" (click)="closeProfile()">
+  <div class="profile-modal-content" (click)="stopPropagation($event)">
 
-<!-- Profile Modal -->
-<div class="profile-modal" [class.open]="isProfileOpen" (click)="$event.stopPropagation()">
-
-  <!-- Header -->
-  <div class="profile-header">
-    <h2>👤 Your Profile</h2>
-    <button class="close-btn" (click)="closeProfile()">✖</button>
-  </div>
-
-  <!-- Profile Info -->
-  <div class="profile-content">
-    <div class="profile-picture">
-      <img [src]="user?.image || 'assets/default-profile.png'" alt="Profile Picture">
+    <div class="profile-header">
+      <div class="image-container">
+        <img [src]="formData.image || user?.image || 'assets/profile.jpg'" alt="Profile" class="profile-img">
+        <label *ngIf="editing" class="upload-btn">
+          📷
+          <input type="file" (change)="onFileSelected($event)" hidden>
+        </label>
+      </div>
+      <h2 *ngIf="!editing">{{ user?.Full_Name }}</h2>
+      <input *ngIf="editing" [(ngModel)]="formData.Full_Name" placeholder="Full Name">
     </div>
 
     <div class="profile-details">
-      <h3>{{ user.name }}</h3>
-      <p>{{ user.email }}</p>
-      <p>{{ user.contactNumber }}</p>
+      <div *ngIf="!editing">
+        <p><strong>Username:</strong> {{ user?.Username }}</p>
+        <p><strong>Email:</strong> {{ user?.Email }}</p>
+        <p><strong>Contact:</strong> {{ user?.Contact_Number }}</p>
+        <p><strong>Address:</strong> {{ user?.Address }}</p>
+        <p><strong>Role:</strong> {{ user?.Role }}</p>
+      </div>
+      <div *ngIf="editing">
+        <input [(ngModel)]="formData.Email" placeholder="Email">
+        <input [(ngModel)]="formData.Contact_Number" placeholder="Contact Number">
+        <input [(ngModel)]="formData.Address" placeholder="Address">
+      </div>
     </div>
-  </div>
 
-  <!-- Actions -->
-  <div class="profile-actions">
-    <button class="edit-btn" (click)="editProfile()">Edit Profile</button>
-  <!-- <button class="logout-btn" (click)="logout()">Logout</button>-->
-  </div>
+    <div class="modal-footer">
+      <button *ngIf="!editing" (click)="editProfile()">Edit</button>
+      <button *ngIf="editing" (click)="saveProfile()">Save</button>
+      <button *ngIf="editing" (click)="cancelEdit()">Cancel</button>
+      <button *ngIf="!editing" (click)="logout()" style="background-color: red;">Logout</button>
+      <button (click)="closeProfile()">Close</button>
+    </div>
 
+  </div>
 </div>

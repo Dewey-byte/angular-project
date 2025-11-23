@@ -1,12 +1,13 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from utils.hash import bcrypt
 from routes.auth_routes import auth
 from routes.user_routes import user
 from routes.profile_routes import profile
-from routes.cart import cart   # ✅ FIXED
+from routes.cart import cart
 from config import Config
+import os
 
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = Config.JWT_SECRET_KEY
@@ -18,11 +19,19 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:4200"}}, supports_cred
 
 jwt = JWTManager(app)
 
-# register blueprints
+# Register blueprints
 app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(user, url_prefix="/user")
 app.register_blueprint(profile, url_prefix="/profile")
-app.register_blueprint(cart, url_prefix="/cart")  # now this works
+app.register_blueprint(cart, url_prefix="/cart")
+
+# Serve uploaded images
+UPLOAD_FOLDER = os.path.join(os.getcwd(), "uploads")
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+@app.route("/uploads/<filename>")
+def uploaded_file(filename):
+    return send_from_directory("uploads", filename)
 
 @app.route("/")
 def home():

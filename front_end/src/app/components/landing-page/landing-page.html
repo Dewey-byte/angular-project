@@ -1,19 +1,38 @@
 <div class="landing-container">
   <!-- HEADER -->
   <header class="header">
+    <!-- LOGO -->
     <div class="logo">
       <img src="assets/logo.png" alt="LibroTrack Logo" class="logo-img">
       <span class="logo-text">LibroTrack</span>
     </div>
 
-    <nav class="nav-links">
-      <a (click)="scrollToProducts()">Shop</a>
-      <a (click)="openLogin()" class="logbtn">Login</a>
-      <a>Profile</a>
-      <a (click)="cartModal.openCart()">🛒</a>
+    <!-- NAV + PROFILE + CART -->
+    <div class="nav-profile-cart">
+      <!-- Navigation -->
+      <nav class="nav-links">
+        <a (click)="scrollToProducts()">Shop</a>
+      </nav>
 
-    </nav>
+      <!-- Login / Profile / Cart -->
+      <div class="profile-cart">
+        <!-- Login -->
+        <button *ngIf="!isLoggedIn" class="logbtn" (click)="openLogin()">Login</button>
+
+        <!-- Profile -->
+        <div *ngIf="isLoggedIn" class="profile-container" (click)="openProfile()">
+          <img [src]="userImage" alt="User" class="profile-pic">
+        </div>
+
+        <!-- Cart -->
+        <button class="cart-btn" (click)="cartModal.openCart()">
+          🛒
+        </button>
+      </div>
+    </div>
   </header>
+
+
 
   <!-- HERO SECTION -->
   <section class="hero">
@@ -81,6 +100,7 @@
   <app-login #loginModal (switchToRegister)="openRegister()"></app-login>
   <app-register #registerModal (switchToLogin)="openLogin()"></app-register>
   <app-cart #cartModal></app-cart>
+  <app-profile #profileModal></app-profile>
 
 
 </div>
