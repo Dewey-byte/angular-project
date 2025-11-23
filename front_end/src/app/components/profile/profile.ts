@@ -3,12 +3,12 @@ import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { NgIf } from '@angular/common';
+
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.html',
-  imports: [FormsModule, RouterModule, HttpClientModule, NgIf],
+  imports: [FormsModule, RouterModule, HttpClientModule],
   styleUrls: ['./profile.css']
 })
 export class Profile implements OnInit {

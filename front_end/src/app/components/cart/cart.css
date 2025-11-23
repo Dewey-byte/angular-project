@@ -1,12 +1,14 @@
-/* Backdrop */
+/* ============================
+   BACKDROP
+============================ */
 .cart-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
   opacity: 0;
   pointer-events: none;
-  transition: 0.3s ease;
+  transition: opacity 0.3s ease;
   z-index: 999;
 }
 
@@ -15,105 +17,198 @@
   pointer-events: auto;
 }
 
-/* Modal Panel */
+/* ============================
+   CART MODAL PANEL
+============================ */
 .cart-modal {
   position: fixed;
   top: 0;
-  right: -400px;
-  width: 350px;
+  right: -100%;
+  width: 100%;
+  max-width: 400px;
   height: 100%;
   background: #ffffff;
-  box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-  transition: 0.3s ease;
-  padding: 20px;
+
+  box-shadow: -8px 0 25px rgba(0, 0, 0, 0.1);
+  border-left: 1px solid #e5e7eb;
+
   display: flex;
   flex-direction: column;
+
+  transition: right 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
   z-index: 1000;
+  touch-action: pan-y;
 }
 
 .cart-modal.open {
   right: 0;
 }
 
-/* Header */
+/* ============================
+   HEADER
+============================ */
 .cart-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cart-header h2 {
+  font-size: 20px;
+  margin: 0;
+  font-weight: 600;
 }
 
 .close-btn {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 22px;
   cursor: pointer;
+  opacity: 0.7;
+  transition: 0.2s;
 }
 
-/* Cart Items */
+.close-btn:hover {
+  opacity: 1;
+}
+
+/* ============================
+   ITEMS SECTION (Scrollable)
+============================ */
 .cart-items {
-  flex: 1;
+  flex: 1; /* fills space between header and footer */
   overflow-y: auto;
+  padding: 15px 10px;
+  scroll-behavior: smooth;
 }
 
+/* Custom scrollbar */
+.cart-items::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cart-items::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.cart-items::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+  border-radius: 3px;
+}
+
+/* ============================
+   EACH CART ITEM
+============================ */
 .cart-item {
   display: flex;
   margin-bottom: 15px;
-  border-bottom: 1px solid #e2e8f0;
-  padding-bottom: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .item-img {
-  width: 60px;
-  height: 60px;
-  border-radius: 6px;
+  width: 65px;
+  height: 65px;
+  border-radius: 8px;
   object-fit: cover;
-  margin-right: 10px;
+  margin-right: 12px;
 }
 
 .item-info h4 {
-  margin: 0;
   font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.item-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
 }
 
 .remove-btn {
-  margin-top: 5px;
+  margin-top: 8px;
   background: #ef4444;
   color: white;
   border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 5px 10px;
+  border-radius: 5px;
   cursor: pointer;
   font-size: 12px;
+  transition: background 0.2s ease;
 }
 
-/* Empty State */
+.remove-btn:hover {
+  background: #dc2626;
+}
+
+/* ============================
+   EMPTY CART STATE
+============================ */
 .empty-cart {
   text-align: center;
   color: #6b7280;
-  margin-top: 50px;
+  padding-top: 40px;
+  font-size: 15px;
 }
 
-/* Footer */
+/* ============================
+   FOOTER (Sticky)
+============================ */
 .cart-footer {
-  border-top: 1px solid #e2e8f0;
-  padding-top: 15px;
+  flex-shrink: 0;
+  padding: 18px 20px;
+  border-top: 1px solid #e5e7eb;
+  background: #ffffff;
 }
 
 .total {
   display: flex;
   justify-content: space-between;
   font-size: 18px;
-  margin-bottom: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
 .checkout-btn {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background: #3b82f6;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.checkout-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+/* ============================
+   MOBILE RESPONSIVE
+============================ */
+@media (max-width: 480px) {
+  .cart-modal {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .item-img {
+    width: 55px;
+    height: 55px;
+  }
+
+  .cart-header h2 {
+    font-size: 18px;
+  }
+
+  .checkout-btn {
+    font-size: 15px;
+    padding: 12px;
+  }
 }

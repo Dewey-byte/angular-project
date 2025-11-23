@@ -1,16 +1,25 @@
+<!-- BACKDROP -->
 <div class="cart-backdrop" [class.open]="isOpen" (click)="closeCart()"></div>
 
-<div class="cart-modal" [class.open]="isOpen" (click)="$event.stopPropagation()">
-
+<!-- CART MODAL -->
+<div
+  class="cart-modal"
+  [class.open]="isOpen"
+  (click)="$event.stopPropagation()"
+  (touchstart)="onTouchStart($event)"
+  (touchmove)="onTouchMove($event)"
+  (touchend)="onTouchEnd($event)"
+>
+  <!-- HEADER -->
   <div class="cart-header">
     <h2>🛒 Your Cart</h2>
     <button class="close-btn" (click)="closeCart()">✖</button>
   </div>
 
+  <!-- ITEMS -->
   <div class="cart-items">
     <div *ngFor="let item of cartItems; let i = index" class="cart-item">
-      <img [src]="item.image" alt="product" class="item-img">
-
+      <img [src]="item.image" alt="product" class="item-img" />
       <div class="item-info">
         <h4>{{ item.name }}</h4>
         <p>₱{{ item.price }}</p>
@@ -23,15 +32,13 @@
     </div>
   </div>
 
+  <!-- FOOTER -->
   <div class="cart-footer" *ngIf="cartItems.length > 0">
     <div class="total">
       <span>Total:</span>
       <strong>₱{{ getTotal() }}</strong>
     </div>
 
-    <button class="checkout-btn">
-      Proceed to Checkout
-    </button>
+    <button class="checkout-btn">Proceed to Checkout</button>
   </div>
-
 </div>
