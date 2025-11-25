@@ -14,7 +14,7 @@ export class AuthService {
   public isLoggedIn$ = this.loggedIn.asObservable();
 
   // Reactive user image state
-  private userImageSubject = new BehaviorSubject<string>('assets/default-profile.png');
+  private userImageSubject = new BehaviorSubject<string>('assets/profile.jpg');
   public userImage$ = this.userImageSubject.asObservable();
 
   constructor(private http: HttpClient) {}
