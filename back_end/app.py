@@ -6,6 +6,7 @@ from routes.auth_routes import auth
 from routes.user_routes import user
 from routes.profile_routes import profile
 from routes.cart import cart
+from routes.products import products_bp
 from config import Config
 import os
 
@@ -24,6 +25,7 @@ app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(user, url_prefix="/user")
 app.register_blueprint(profile, url_prefix="/profile")
 app.register_blueprint(cart, url_prefix="/cart")
+app.register_blueprint(products_bp, url_prefix="/products")
 
 # Serve uploaded images
 UPLOAD_FOLDER = os.path.join(os.getcwd(), "uploads")

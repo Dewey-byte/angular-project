@@ -1,9 +1,31 @@
-<div class="p-4">
-  <h2 class="text-xl font-bold mb-2">Products</h2>
-  <div *ngFor="let p of products" class="border p-2 mb-2 rounded">
-    <p><strong>{{ p.Product_Name }}</strong></p>
-    <p>Category: {{ p.Category }}</p>
-    <p>Price: ₱{{ p.Price }}</p>
-    <p>Stock: {{ p.Stock_Quantity }}</p>
-  </div>
-</div>
+<h2>Product List</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Description</th>
+      <th>Author/Brand</th>
+      <th>Price</th>
+      <th>Stock</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of products">
+      <td>{{ product.Product_ID }}</td>
+      <td>{{ product.Product_Name }}</td>
+      <td>{{ product.Category }}</td>
+      <td>{{ product.Description }}</td>
+      <td>{{ product.Author_Brand }}</td>
+      <!-- Convert Price to number safely and apply PHP currency -->
+      <td>{{ (+product.Price) | currency:'PHP':'symbol':'1.2-2' }}</td>
+      <td>{{ product.Stock_Quantity }}</td>
+      <td>
+        <button (click)="selectProduct(product)">Edit</button>
+        <button (click)="deleteProduct(product.Product_ID!)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
