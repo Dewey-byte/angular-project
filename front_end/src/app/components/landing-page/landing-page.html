@@ -1,40 +1,41 @@
 <div class="landing-container">
-  <!-- HEADER -->
+
+  <!-- ===================== HEADER ===================== -->
   <header class="header">
-    <!-- LOGO -->
+
+    <!-- Logo -->
     <div class="logo">
       <img src="assets/logo.png" alt="LibroTrack Logo" class="logo-img">
       <span class="logo-text">LibroTrack</span>
     </div>
 
-    <!-- NAV + PROFILE + CART -->
+    <!-- Navigation + Profile + Cart -->
     <div class="nav-profile-cart">
-      <!-- Navigation -->
+
+      <!-- Navigation Links -->
       <nav class="nav-links">
         <a (click)="scrollToProducts()">Shop</a>
       </nav>
 
-      <!-- Login / Profile / Cart -->
+      <!-- Login/Profile/Cart -->
       <div class="profile-cart">
-        <!-- Login -->
+
+        <!-- Login Button -->
         <button *ngIf="!isLoggedIn" class="logbtn" (click)="openLogin()">Login</button>
 
-        <!-- Profile -->
+        <!-- Profile Image -->
         <div *ngIf="isLoggedIn" class="profile-container" (click)="openProfile()">
           <img [src]="userImage" alt="User" class="profile-pic">
         </div>
 
-        <!-- Cart -->
-        <button class="cart-btn" (click)="cartModal.openCart()">
-          🛒
-        </button>
+        <!-- Cart Button -->
+        <button class="cart-btn" (click)="cartModal.openCart()">🛒</button>
+
       </div>
     </div>
   </header>
 
-
-
-  <!-- HERO SECTION -->
+  <!-- ===================== HERO SECTION ===================== -->
   <section class="hero">
     <div class="hero-content">
       <h1>Welcome to <span>LibroTrack</span></h1>
@@ -43,41 +44,122 @@
     </div>
   </section>
 
-  <!-- PRODUCTS SECTION -->
+  <!-- ===================== PRODUCTS SECTION ===================== -->
   <section id="products" class="py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Title -->
+
+      <!-- Section Title -->
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold mb-4" style="color: #1e293b;">Our Products</h2>
-        <p class="text-lg" style="color: #64748b;">Carefully selected books and stationery for every reader and writer</p>
+        <h2 class="text-3xl font-bold mb-4" style="color: #1e293b; justify-content: center; align-items: center; display: flex; ">Our Products</h2>
+        <p class="text-lg" style="color: #64748b; justify-content: center; align-items: center; display: flex;">
+          Carefully selected books and stationery for every reader and writer
+        </p>
       </div>
 
-      <!-- Category Filters -->
-      <div class="flex justify-center mb-8">
-        <div class="flex space-x-4 p-1 rounded-lg" style="background-color: #f1f5f9;">
-          <button onclick="filterProducts('all')" class="category-filter active px-6 py-2 rounded-md font-medium transition-colors" style="background-color: #3b82f6; color: #ffffff;">All Products</button>
-          <button onclick="filterProducts('Books')" class="category-filter px-6 py-2 rounded-md font-medium transition-colors" style="color: #374151;">📚 Books</button>
-          <button onclick="filterProducts('Stationery')" class="category-filter px-6 py-2 rounded-md font-medium transition-colors" style="color: #374151;">✏️ Stationery</button>
+      <!-- ===================== SEARCH & FILTERS ===================== -->
+      <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-10">
+
+        <!-- Search Bar -->
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="applyFilters()"
+          placeholder="Search products..."
+          class="px-4 py-2 border rounded-lg w-full md:w-1/3"
+        />
+
+        <!-- Category Filter -->
+        <select
+          [(ngModel)]="selectedCategory"
+          (change)="applyFilters()"
+          class="px-4 py-2 border rounded-lg"
+        >
+          <option value="">All Categories</option>
+          <option value="Books">📚 Books</option>
+          <option value="Stationery">✏️ Stationery</option>
+        </select>
+
+        <!-- Price Filter -->
+        <div class="flex gap-2">
+          <input
+            type="number"
+            [(ngModel)]="minPrice"
+            (input)="applyFilters()"
+            placeholder="Min ₱"
+            class="px-4 py-2 border rounded-lg w-24"
+          />
+          <input
+            type="number"
+            [(ngModel)]="maxPrice"
+            (input)="applyFilters()"
+            placeholder="Max ₱"
+            class="px-4 py-2 border rounded-lg w-24"
+          />
+        </div>
+
+      </div>
+
+      <!-- ===================== PRODUCT GRID ===================== -->
+      <div *ngIf="paginatedProducts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div *ngFor="let p of paginatedProducts" class="bg-white rounded-xl shadow p-4 hover:shadow-xl transition">
+
+          <!-- Product Image -->
+          <img
+            [src]="p.image_uri || 'assets/no-image.png'"
+            alt="{{ p.Product_Name }}"
+            class="w-full h-60 object-cover rounded-lg"
+          />
+
+          <!-- Product Info -->
+          <h3 class="text-lg font-semibold mt-3">{{ p.Product_Name }}</h3>
+          <p class="text-sm text-gray-600 line-clamp-2">{{ p.Description }}</p>
+          <div class="text-xl font-bold text-red-500 mt-2">₱{{ p.Price }}</div>
+
+          <!-- Add to Cart Button -->
+          <button
+            (click)="addToCart(p)"
+            class="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Add to Cart
+          </button>
+
         </div>
       </div>
 
-      <!-- Products Grid -->
-      <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <!-- Products will be dynamically loaded here -->
+      <!-- No Products Found -->
+      <div *ngIf="paginatedProducts.length === 0" class="text-center py-16">
+        <span class="text-6xl mb-4 block">🏪</span>
+        <h3 class="text-xl font-semibold mb-2" style="color: #374151;">No Products Found</h3>
+        <p style="color: #6b7280;">Try adjusting your search or filters.</p>
       </div>
 
-      <!-- Empty State -->
-      <div id="empty-products" class="text-center py-16 hidden">
-        <span class="text-6xl mb-4 block">🏪</span>
-        <h3 class="text-xl font-semibold mb-2" style="color: #374151;">No Products Available</h3>
-        <p style="color: #6b7280;">Check back soon for new arrivals!</p>
+      <!-- ===================== PAGINATION ===================== -->
+      <div class="flex justify-center items-center mt-10 space-x-4">
+        <button
+          (click)="prevPage()"
+          [disabled]="currentPage === 1"
+          class="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400 disabled:opacity-50"
+        >
+          Prev
+        </button>
+
+        <span class="font-medium text-gray-600">Page {{currentPage}} / {{totalPages}}</span>
+
+        <button
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages"
+          class="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400 disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
+
     </div>
   </section>
 
-  <!-- FEATURES SECTION -->
+  <!-- ===================== FEATURES SECTION ===================== -->
   <section class="features">
-    <div class="feature" >
+    <div class="feature">
       <h3>🛒 Browse Products</h3>
       <p>Explore a wide range of books and stationery for every need.</p>
     </div>
@@ -91,25 +173,15 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- ===================== FOOTER ===================== -->
   <footer class="footer">
     <p>&copy; 2025 LibroTrack | All Rights Reserved.</p>
   </footer>
 
-  <!-- MODALS -->
+  <!-- ===================== MODALS ===================== -->
   <app-login #loginModal (switchToRegister)="openRegister()"></app-login>
   <app-register #registerModal (switchToLogin)="openLogin()"></app-register>
   <app-cart #cartModal></app-cart>
   <app-profile #profileModal></app-profile>
 
-
 </div>
-
-
-
-
-
-
-
-
-

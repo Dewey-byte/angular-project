@@ -1,50 +1,179 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from database.connection import get_db
+import traceback
 
 cart = Blueprint("cart", __name__)
 
-# GET CART ITEMS
+# -------------------------------
+# GET CART ITEMS WITH TOTALS
+# -------------------------------
 @cart.route("/", methods=["GET"])
 @jwt_required()
 def get_cart():
-    user_id = get_jwt_identity()
-    db = get_db()
-    cur = db.cursor()
+    try:
+        user_id = get_jwt_identity()
+        if not user_id:
+            return jsonify({"error": "Invalid user"}), 401
 
-    cur.execute("SELECT * FROM cart WHERE user_id = %s", (user_id,))
-    items = cur.fetchall()
+        db = get_db()
+        cur = db.cursor()  
 
-    return jsonify(items), 200
+        cur.execute("""
+            SELECT 
+                c.cart_id, c.quantity, 
+                p.Product_ID, p.Product_Name, p.Price, p.image_uri
+            FROM cart c
+            JOIN products p ON c.product_id = p.Product_ID
+            WHERE c.user_id = %s
+        """, (user_id,))
+        items = cur.fetchall()
 
+        cart_total = 0
+        for item in items:
+            price = float(item["Price"])
+            qty = int(item["quantity"])
+            item["total_price"] = round(price * qty, 2)
+            cart_total += price * qty
+
+        response = {
+            "items": items,
+            "cart_total": round(cart_total, 2)
+        }
+
+        return jsonify(response), 200
+
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'db' in locals():
+            db.close()
+
+
+# -------------------------------
 # ADD TO CART
+# -------------------------------
 @cart.route("/add", methods=["POST"])
 @jwt_required()
 def add_cart():
-    data = request.json
-    user_id = get_jwt_identity()
+    try:
+        data = request.get_json()
+        if not data or "product_id" not in data:
+            return jsonify({"error": "Missing product_id"}), 422
 
-    product_id = data.get("product_id")
+        product_id = data["product_id"]
+        try:
+            quantity = int(data.get("quantity", 1))
+        except ValueError:
+            return jsonify({"error": "Quantity must be a number"}), 422
 
-    db = get_db()
-    cur = db.cursor()
+        user_id = get_jwt_identity()
+        if not user_id:
+            return jsonify({"error": "Invalid user"}), 401
 
-    cur.execute("""
-        INSERT INTO cart (user_id, product_id)
-        VALUES (%s, %s)
-    """, (user_id, product_id))
+        db = get_db()
+        cur = db.cursor()  # DictCursor
 
-    db.commit()
-    return jsonify({"msg": "Added to cart"}), 201
+        # Check if product already exists in cart
+        cur.execute(
+            "SELECT cart_id, quantity FROM cart WHERE user_id=%s AND product_id=%s",
+            (user_id, product_id)
+        )
+        existing = cur.fetchone()
 
-# REMOVE ITEM
-@cart.route("/remove/<int:item_id>", methods=["DELETE"])
+        if existing:
+            new_qty = existing["quantity"] + quantity
+            cur.execute(
+                "UPDATE cart SET quantity=%s WHERE cart_id=%s",
+                (new_qty, existing["cart_id"])
+            )
+        else:
+            cur.execute(
+                "INSERT INTO cart (user_id, product_id, quantity) VALUES (%s, %s, %s)",
+                (user_id, product_id, quantity)
+            )
+
+        db.commit()
+        return jsonify({"msg": "Added to cart"}), 201
+
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'db' in locals():
+            db.close()
+
+
+# -------------------------------
+# UPDATE QUANTITY
+# -------------------------------
+@cart.route("/update/<int:cart_id>", methods=["PUT"])
 @jwt_required()
-def remove_cart(item_id):
-    db = get_db()
-    cur = db.cursor()
+def update_cart(cart_id):
+    try:
+        data = request.get_json()
+        if not data or "quantity" not in data:
+            return jsonify({"error": "Missing quantity"}), 422
 
-    cur.execute("DELETE FROM cart WHERE id = %s", (item_id,))
-    db.commit()
+        try:
+            quantity = int(data["quantity"])
+        except ValueError:
+            return jsonify({"error": "Quantity must be a number"}), 422
 
-    return jsonify({"msg": "Item removed"}), 200
+        if quantity < 1:
+            return jsonify({"error": "Invalid quantity"}), 422
+
+        db = get_db()
+        cur = db.cursor()  # DictCursor
+        cur.execute(
+            "UPDATE cart SET quantity=%s WHERE cart_id=%s",
+            (quantity, cart_id)
+        )
+        db.commit()
+
+        return jsonify({"msg": "Quantity updated"}), 200
+
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'db' in locals():
+            db.close()
+
+
+# -------------------------------
+# REMOVE ITEM
+# -------------------------------
+@cart.route("/remove/<int:cart_id>", methods=["DELETE"])
+@jwt_required()
+def remove_cart(cart_id):
+    try:
+        db = get_db()
+        cur = db.cursor()  # DictCursor
+
+        cur.execute("DELETE FROM cart WHERE cart_id = %s", (cart_id,))
+        if cur.rowcount == 0:
+            return jsonify({"error": "Item not found"}), 404
+
+        db.commit()
+        return jsonify({"msg": "Item removed"}), 200
+
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'db' in locals():
+            db.close()

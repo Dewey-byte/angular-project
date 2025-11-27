@@ -14,15 +14,41 @@ export class AuthService {
   public isLoggedIn$ = this.loggedIn.asObservable();
 
   // Reactive user image state
-  private userImageSubject = new BehaviorSubject<string>('assets/profile.jpg');
+  private userImageSubject = new BehaviorSubject<string>(localStorage.getItem('image') || 'assets/profile.jpg');
   public userImage$ = this.userImageSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
+  // ----------------------
+  // TOKEN HANDLING
+  // ----------------------
   private hasToken(): boolean {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem('access_token');
   }
 
+  saveToken(token: string) {
+    localStorage.setItem('access_token', token);
+    this.loggedIn.next(true);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('access_token');
+  }
+
+  isLoggedIn(): boolean {
+    return this.hasToken();
+  }
+
+  logout(): void {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('image');
+    this.loggedIn.next(false);
+    this.setUserImage('assets/profile.jpg'); // reset image
+  }
+
+  // ----------------------
+  // AUTHENTICATION
+  // ----------------------
   register(userData: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(`${this.apiUrl}/user/register`, userData, { headers });
@@ -33,62 +59,44 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/login`, credentials, { headers }).pipe(
       tap((res: any) => {
         if (res.token) {
-          this.saveToken(res.token);
-          if (res.user?.image) {
-            this.setUserImage(res.user.image);
-          }
+          this.saveToken(res.token); // save JWT
+          const image = res.user?.image || 'assets/profile.jpg';
+          this.setUserImage(image); // reactive + localStorage
         }
       })
     );
   }
 
-  logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('image');
-    this.loggedIn.next(false); // notify subscribers
-    this.setUserImage('assets/default-profile.png'); // reset image
-  }
-
-  saveToken(token: string) {
-    localStorage.setItem("token", token);
-    this.loggedIn.next(true); // notify subscribers
-  }
-
-  getToken() {
-    return localStorage.getItem("token");
-  }
-
-  isLoggedIn(): boolean {
-    return this.hasToken();
-  }
-
+  // ----------------------
+  // PROFILE MANAGEMENT
+  // ----------------------
   getProfile(): Observable<any> {
-    const token = localStorage.getItem("token") || "";
+    const token = this.getToken() || '';
     return this.http.get(`${this.apiUrl}/profile/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     }).pipe(
       tap((res: any) => {
-        if (res.user?.image) {
-          this.setUserImage(res.user.image);
-        }
+        const image = res.user?.image || 'assets/profile.jpg';
+        this.setUserImage(image);
       })
     );
   }
 
   updateProfile(data: FormData): Observable<any> {
-    const token = localStorage.getItem("token") || "";
+    const token = this.getToken() || '';
     return this.http.put(`${this.apiUrl}/profile/profile/edit`, data, {
-        headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` }
     }).pipe(
       tap((res: any) => {
-        // Update user image in header after profile edit
-        if (res.user?.image) {
-          this.setUserImage(res.user.image);
-        }
+        const image = res.user?.image || 'assets/profile.jpg';
+        this.setUserImage(image);
       })
     );
   }
 
+  // ----------------------
+  // USER IMAGE
+  // ----------------------
   setUserImage(image: string) {
     this.userImageSubject.next(image);
     localStorage.setItem('image', image); // persist locally

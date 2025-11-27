@@ -1,4 +1,5 @@
 import MySQLdb
+import MySQLdb.cursors
 from config import Config
 
 def get_db():
@@ -7,5 +8,5 @@ def get_db():
         user=Config.DB_USER,
         passwd=Config.DB_PASSWORD,
         db=Config.DB_NAME,
-        cursorclass=MySQLdb.cursors.DictCursor
+        cursorclass=MySQLdb.cursors.DictCursor  # dictionary cursor
     )

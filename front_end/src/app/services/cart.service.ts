@@ -10,21 +10,24 @@ export class CartService {
 
   constructor(private http: HttpClient) {}
 
-  // attach token to all requests
+  // Attach JWT token to headers
   private authHeaders() {
-    const token = localStorage.getItem('token') || '';
+    const token = localStorage.getItem('access_token');
     return {
       headers: new HttpHeaders({
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       }),
     };
   }
 
+  // GET all cart items
   getCartItems(): Observable<any> {
     return this.http.get(`${this.apiUrl}/`, this.authHeaders());
   }
 
-  addToCart(productId: number, quantity: number): Observable<any> {
+  // ADD to cart
+  addToCart(productId: number, quantity: number = 1): Observable<any> {
     return this.http.post(
       `${this.apiUrl}/add`,
       { product_id: productId, quantity },
@@ -32,9 +35,17 @@ export class CartService {
     );
   }
 
+
+  // REMOVE from cart
   removeCartItem(itemId: number): Observable<any> {
-    return this.http.delete(
-      `${this.apiUrl}/remove/${itemId}`,
+    return this.http.delete(`${this.apiUrl}/remove/${itemId}`, this.authHeaders());
+  }
+
+  // UPDATE quantity
+  updateCartItem(itemId: number, quantity: number): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/update/${itemId}`,
+      { quantity },
       this.authHeaders()
     );
   }

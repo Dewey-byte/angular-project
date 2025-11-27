@@ -50,11 +50,10 @@ export class LoginComponent {
       return;
     }
 
+    // Use updated AuthService
     this.authService.login(this.credentials).subscribe({
       next: (response) => {
-        if (response.token) {
-          localStorage.setItem('token', response.token);
-        }
+        // AuthService already saves token + updates image
         alert(response.message || 'Login successful!');
         this.closeModal(); // CLOSE MODAL AFTER LOGIN
       },

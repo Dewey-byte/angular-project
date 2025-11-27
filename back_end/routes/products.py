@@ -53,8 +53,9 @@ def create_product():
     cursor = conn.cursor()
 
     query = """
-    INSERT INTO products (Product_Name, Category, Description, Author_Brand, Price, Stock_Quantity)
-    VALUES (%s, %s, %s, %s, %s, %s)
+    INSERT INTO products 
+    (Product_Name, Category, Description, Author_Brand, Price, Stock_Quantity, image_uri)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
     """
 
     for item in data:
@@ -64,7 +65,8 @@ def create_product():
             item.get("Description"),
             item.get("Author_Brand"),
             float(item.get("Price", 0)),
-            int(item.get("Stock_Quantity", 0))
+            int(item.get("Stock_Quantity", 0)),
+            item.get("image_uri")   # added
         ))
         conn.commit()
         new_id = cursor.lastrowid
@@ -90,7 +92,8 @@ def update_product(id):
         Description=%s,
         Author_Brand=%s,
         Price=%s,
-        Stock_Quantity=%s
+        Stock_Quantity=%s,
+        image_uri=%s
     WHERE Product_ID=%s
     """
     cursor.execute(query, (
@@ -100,6 +103,7 @@ def update_product(id):
         data.get("Author_Brand"),
         float(data.get("Price", 0)),
         int(data.get("Stock_Quantity", 0)),
+        data.get("image_uri"),   # added
         id
     ))
     conn.commit()

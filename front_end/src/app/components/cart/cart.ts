@@ -12,7 +12,7 @@ export class CartComponent {
   isOpen = false;
   cartItems: any[] = [];
 
-  // Swipe-to-close properties
+  // Swipe-to-close
   startX = 0;
   currentX = 0;
   dragging = false;
@@ -21,38 +21,55 @@ export class CartComponent {
 
   openCart() {
     this.isOpen = true;
-    this.loadCart(); // Load from backend
+    this.loadCart();
+    document.body.style.overflow = 'hidden'; // lock background scroll
   }
 
   closeCart() {
     this.isOpen = false;
+    document.body.style.overflow = ''; // unlock scroll
   }
 
   loadCart() {
     this.cartService.getCartItems().subscribe({
       next: (data) => {
-        this.cartItems = data;
+        if (Array.isArray(data)) {
+          this.cartItems = data;
+        } else if (data && Array.isArray(data.items)) {
+          this.cartItems = data.items;
+        } else {
+          this.cartItems = [];
+        }
       },
-      error: (err) => console.error(err),
+      error: () => {
+        this.cartItems = [];
+      },
     });
   }
 
-  removeItem(id: number) {
-    this.cartService.removeCartItem(id).subscribe(() => {
-      this.loadCart(); // Refresh cart after removal
+  removeItem(item: any) {
+    if (!item.cart_id) return;
+    this.cartService.removeCartItem(item.cart_id).subscribe({
+      next: () => this.loadCart(),
+    });
+  }
+
+  updateQuantity(item: any, newQty: number) {
+    if (newQty < 1 || !item.cart_id) return;
+    this.cartService.updateCartItem(item.cart_id, newQty).subscribe({
+      next: () => this.loadCart(),
     });
   }
 
   getTotal() {
-    return this.cartItems.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
+    return this.cartItems.reduce((sum, item) => {
+      const price = parseFloat(item.Price || 0);
+      const qty = item.quantity || 1;
+      return sum + price * qty;
+    }, 0);
   }
 
-  // =============================
-  // SWIPE-TO-CLOSE METHODS
-  // =============================
+  // Swipe-to-close methods
   onTouchStart(event: TouchEvent) {
     this.startX = event.touches[0].clientX;
     this.dragging = true;
@@ -66,16 +83,13 @@ export class CartComponent {
     if (modal) modal.style.transform = `translateX(${translateX}px)`;
   }
 
-  onTouchEnd(event: TouchEvent) {
+  onTouchEnd() {
     this.dragging = false;
     const translateX = this.currentX - this.startX;
     const modal = document.querySelector('.cart-modal') as HTMLElement;
-
     if (translateX < -100) {
-      // swipe left to close
       this.closeCart();
     } else {
-      // reset position
       if (modal) modal.style.transform = `translateX(0)`;
     }
   }
