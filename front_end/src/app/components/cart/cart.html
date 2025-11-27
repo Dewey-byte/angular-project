@@ -8,7 +8,7 @@
   (click)="$event.stopPropagation()"
   (touchstart)="onTouchStart($event)"
   (touchmove)="onTouchMove($event)"
-  (touchend)="onTouchEnd($event)"
+  (touchend)="onTouchEnd()"
 >
   <!-- HEADER -->
   <div class="cart-header">
@@ -19,19 +19,18 @@
   <!-- ITEMS -->
   <div class="cart-items">
     <div *ngFor="let item of cartItems" class="cart-item">
-      <img [src]="item.image || 'assets/default-product.png'" alt="product" class="item-img" />
+      <img [src]="item.image_uri || 'assets/no-image.png'" alt="product" class="item-img" />
       <div class="item-info">
-        <h4>{{ item.name }}</h4>
-        <p>₱{{ item.price }} x {{ item.quantity }}</p>
+        <h4>{{ item.Product_Name }}</h4>
+        <p>₱{{ item.Price }} x {{ item.quantity }}</p>
 
-        <!-- Quantity buttons (optional) -->
         <div class="quantity-controls">
           <button (click)="updateQuantity(item, item.quantity - 1)">-</button>
           <span>{{ item.quantity }}</span>
           <button (click)="updateQuantity(item, item.quantity + 1)">+</button>
         </div>
 
-        <button class="remove-btn" (click)="removeItem(item.id)">Remove</button>
+        <button class="remove-btn" (click)="removeItem(item)">Remove</button>
       </div>
     </div>
 
@@ -46,7 +45,6 @@
       <span>Total:</span>
       <strong>₱{{ getTotal() }}</strong>
     </div>
-
     <button class="checkout-btn">Proceed to Checkout</button>
   </div>
 </div>
