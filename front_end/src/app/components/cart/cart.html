@@ -18,12 +18,20 @@
 
   <!-- ITEMS -->
   <div class="cart-items">
-    <div *ngFor="let item of cartItems; let i = index" class="cart-item">
-      <img [src]="item.image" alt="product" class="item-img" />
+    <div *ngFor="let item of cartItems" class="cart-item">
+      <img [src]="item.image || 'assets/default-product.png'" alt="product" class="item-img" />
       <div class="item-info">
         <h4>{{ item.name }}</h4>
-        <p>₱{{ item.price }}</p>
-        <button class="remove-btn" (click)="removeItem(i)">Remove</button>
+        <p>₱{{ item.price }} x {{ item.quantity }}</p>
+
+        <!-- Quantity buttons (optional) -->
+        <div class="quantity-controls">
+          <button (click)="updateQuantity(item, item.quantity - 1)">-</button>
+          <span>{{ item.quantity }}</span>
+          <button (click)="updateQuantity(item, item.quantity + 1)">+</button>
+        </div>
+
+        <button class="remove-btn" (click)="removeItem(item.id)">Remove</button>
       </div>
     </div>
 
