@@ -1,12 +1,13 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { CartService } from '../../services/cart.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.html',
   styleUrls: ['./cart.css'],
-  imports: [NgFor, NgIf],
+  imports: [NgFor, NgIf, FormsModule],
 })
 export class CartComponent {
   isOpen = false;

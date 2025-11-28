@@ -50,12 +50,26 @@ export class LoginComponent {
       return;
     }
 
-    // Use updated AuthService
     this.authService.login(this.credentials).subscribe({
       next: (response) => {
-        // AuthService already saves token + updates image
         alert(response.message || 'Login successful!');
-        this.closeModal(); // CLOSE MODAL AFTER LOGIN
+
+        // Save role to localStorage if backend returned it
+        if (response.role) {
+          localStorage.setItem('role', response.role);
+        }
+
+        // ✅ Close modal first, then redirect
+        this.closeModal();
+
+        // Use response.role directly to redirect
+        setTimeout(() => {
+          if (response.role === 'Admin') {
+            this.router.navigate(['/admin']);  // must match your AppRoutingModule
+          } else {
+            this.router.navigate(['/']);       // normal user goes to landing page
+          }
+        }, 100); // slight delay ensures modal closes before navigation
       },
       error: (err) => {
         alert(err.error?.message || 'Login failed!');

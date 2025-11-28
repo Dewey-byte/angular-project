@@ -6,6 +6,9 @@ import { RegisterComponent } from './components/register/register.component';
 import { Profile } from './components/profile/profile';
 import { ProductsComponent } from './components/products/products.component';
 import { AdminPage } from './components/admin/admin';
+import { AdminGuard } from './guards/admin-guard';
+
+
 
 export const routes: Routes = [
   { path: '', component: LandingPage },   // default landing page
@@ -13,7 +16,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent }, // register page
   {path: 'profile', component: Profile}, // profile page
   {path: 'products', component: ProductsComponent}, // products page
-  {path: 'admin',component: AdminPage} // admin page
+  { path: 'admin', component: AdminPage, canActivate: [AdminGuard] },
 ];
 
 @NgModule({

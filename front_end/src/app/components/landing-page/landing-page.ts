@@ -42,7 +42,7 @@ export class LandingPage implements AfterViewInit {
   maxPrice: number | null = null;
 
   currentPage = 1;
-  itemsPerPage = 18;
+  itemsPerPage = 16;
   totalPages = 1;
 
   constructor(public auth: AuthService) {}

@@ -59,9 +59,17 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/login`, credentials, { headers }).pipe(
       tap((res: any) => {
         if (res.token) {
-          this.saveToken(res.token); // save JWT
+          // Save JWT
+          this.saveToken(res.token);
+
+          // ⭐ Save ROLE returned from backend (admin / user)
+          if (res.role) {
+            localStorage.setItem('role', res.role);
+          }
+
+          // Save user image
           const image = res.user?.image || 'assets/profile.jpg';
-          this.setUserImage(image); // reactive + localStorage
+          this.setUserImage(image);
         }
       })
     );

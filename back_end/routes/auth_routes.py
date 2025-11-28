@@ -18,7 +18,8 @@ def login():
     conn = get_db()
     cursor = conn.cursor(MySQLdb.cursors.DictCursor)
 
-    cursor.execute("SELECT * FROM Users WHERE Email = %s", (email,))
+    # Fetch user + role
+    cursor.execute("SELECT User_ID, Email, Password, Role FROM Users WHERE Email = %s", (email,))
     user = cursor.fetchone()
 
     cursor.close()
@@ -30,11 +31,12 @@ def login():
     if not check_password(user["Password"], password):
         return jsonify({"success": False, "message": "Incorrect password"}), 401
 
-    # FIX: identity must be a STRING
-    token = create_access_token(identity=str(user["User_ID"]))
+    # Create token with role included
+    token = create_access_token(identity=str(user["User_ID"]), additional_claims={"role": user["Role"]})
 
     return jsonify({
         "success": True,
         "token": token,
+        "role": user["Role"],    # <--- Frontend will use this to redirect
         "message": "Login successful"
     }), 200

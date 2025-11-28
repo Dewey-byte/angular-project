@@ -1,0 +1,144 @@
+/* Page Layout */
+.dashboard-container {
+  padding: 1.5rem;
+  background: #f3f4f6;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Header */
+.dashboard-header h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+}
+
+.dashboard-header p {
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* Summary Cards */
+.summary-card {
+  background: white;
+  padding: 1.2rem;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+/* Tabs */
+.tabs nav button {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.tabs nav button:hover {
+  background: #f9fafb;
+}
+
+.tabs nav .active {
+  border-bottom: 3px solid #3b82f6;
+  color: #3b82f6;
+}
+
+/* Add New Product Button */
+.add-btn {
+  background: #2563eb;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.add-btn:hover {
+  background: #1d4ed8;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 2.5rem 0;
+  color: #9ca3af;
+}
+
+.empty-state .icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+/* Product Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+}
+
+thead {
+  background: #f9fafb;
+}
+
+th {
+  text-align: left;
+  padding: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+td {
+  padding: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+tbody tr:hover {
+  background: #f3f4f6;
+  transition: 0.15s;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  thead {
+    display: none;
+  }
+
+  table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+
+  table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  table td:last-child {
+    border-bottom: none;
+  }
+
+  table td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6b7280;
+  }
+}

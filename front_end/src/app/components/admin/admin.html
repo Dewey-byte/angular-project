@@ -1,1 +1,110 @@
-<p>admin works!</p>
+<div class="dashboard-container">
+  <button routerLink="/">Go to Shop</button>
+  <!-- Header -->
+  <div class="dashboard-header mb-6">
+    <h1>Inventory & Order Management</h1>
+    <p>Manage inventory and track orders in real-time</p>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+
+    <div class="summary-card">
+      <div>
+        <p class="text-gray-500 text-sm">TOTAL PRODUCTS</p>
+        <p class="text-xl font-bold">{{ totalProducts }}</p>
+      </div>
+      <div class="text-3xl">📦</div>
+    </div>
+
+    <div class="summary-card">
+      <div>
+        <p class="text-gray-500 text-sm">TOTAL ORDERS</p>
+        <p class="text-xl font-bold">{{ totalOrders }}</p>
+      </div>
+      <div class="text-3xl">📄</div>
+    </div>
+
+    <div class="summary-card">
+      <div>
+        <p class="text-gray-500 text-sm">LOW STOCK ITEMS</p>
+        <p class="text-xl font-bold text-yellow-500">{{ lowStockItems }}</p>
+      </div>
+      <div class="text-3xl">⚠️</div>
+    </div>
+
+    <div class="summary-card">
+      <div>
+        <p class="text-gray-500 text-sm">TOTAL REVENUE</p>
+        <p class="text-xl font-bold">${{ totalRevenue.toFixed(2) }}</p>
+      </div>
+      <div class="text-3xl">💰</div>
+    </div>
+
+  </div>
+
+  <!-- Tabs -->
+  <div class="bg-white rounded shadow tabs mb-6">
+    <nav class="flex border-b">
+      <button
+        class=""
+        [class.active]="activeTab === 'products'"
+        (click)="switchTab('products')">Products</button>
+
+      <button
+        [class.active]="activeTab === 'orders'"
+        (click)="switchTab('orders')">Orders</button>
+
+      <button
+        [class.active]="activeTab === 'reports'"
+        (click)="switchTab('reports')">Reports</button>
+    </nav>
+
+    <div class="p-4">
+
+      <!-- Products Tab -->
+      <div *ngIf="activeTab === 'products'">
+        <button class="add-btn mb-4" (click)="addNewProduct()">+ Add New Product</button>
+
+        <div *ngIf="products.length === 0" class="empty-state">
+          <div class="icon">📦</div>
+          <p>No products yet</p>
+          <p class="text-sm">Click "Add New Product" to get started</p>
+        </div>
+
+        <!-- Product Table -->
+        <table *ngIf="products.length > 0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Stock</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let product of products">
+              <td data-label="ID">{{ product.id }}</td>
+              <td data-label="Name">{{ product.name }}</td>
+              <td data-label="Stock">{{ product.stock }}</td>
+              <td data-label="Price">${{ product.price }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Orders Tab -->
+      <div *ngIf="activeTab === 'orders'">
+        <p>Orders table will go here</p>
+      </div>
+
+      <!-- Reports Tab -->
+      <div *ngIf="activeTab === 'reports'">
+        <p>Reports content will go here</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
