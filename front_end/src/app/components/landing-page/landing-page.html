@@ -36,12 +36,28 @@
   </header>
 
   <!-- ===================== HERO SECTION ===================== -->
-  <section class="hero">
-    <div class="hero-content">
+  <section class="hero-slider">
+
+    <div class="slides">
+
+      <!-- Duplicate images to make infinite loop seamless -->
+      <div class="slide" style="background-image: url('assets/hero1.png');"></div>
+      <div class="slide" style="background-image: url('assets/hero2.png');"></div>
+      <div class="slide" style="background-image: url('assets/hero3.png');"></div>
+
+      <!-- Duplicate slides for smooth infinite looping -->
+      <div class="slide" style="background-image: url('assets/hero1.png');"></div>
+      <div class="slide" style="background-image: url('assets/hero2.png');"></div>
+      <div class="slide" style="background-image: url('assets/hero3.png');"></div>
+
+    </div>
+
+    <div class="hero-overlay">
       <h1>Welcome to <span>LibroTrack</span></h1>
       <p>Your smart online bookstore and e-commerce platform.</p>
       <button (click)="scrollToProducts()">Start Shopping</button>
     </div>
+
   </section>
 
   <!-- ===================== PRODUCTS SECTION ===================== -->
@@ -74,7 +90,7 @@
           (change)="applyFilters()"
           class="px-4 py-2 border rounded-lg"
         >
-          <option value="">All Categories</option>
+          <option value="" >All Categories</option>
           <option value="Books">📚 Books</option>
           <option value="Stationery">✏️ Stationery</option>
         </select>

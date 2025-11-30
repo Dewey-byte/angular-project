@@ -1,4 +1,4 @@
-<div class="profile-modal-backdrop" *ngIf="isOpen" (click)="closeProfile()">
+<div class="profile-modal-backdrop" style="z-index: 1000;" *ngIf="isOpen" (click)="closeProfile()">
   <div class="profile-modal-content" (click)="stopPropagation($event)">
 
     <div class="profile-header">

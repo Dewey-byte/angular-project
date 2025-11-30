@@ -101,6 +101,7 @@ export class LandingPage implements AfterViewInit {
 
   applyFilters() {
     // Ensure numeric min/max
+    this.selectedCategory = this.selectedCategory || 'all';
     this.minPrice = this.parseNumber(this.minPrice);
     this.maxPrice = this.parseNumber(this.maxPrice);
 
