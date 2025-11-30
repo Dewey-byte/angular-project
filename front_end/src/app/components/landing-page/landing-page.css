@@ -4,7 +4,7 @@
   color: #1e293b;
   display: flex;
   flex-direction: column;
-  background: #f9fafb;
+  background: #4f5839;
   min-height: 100vh;
 }
 
@@ -14,12 +14,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #ffffff;
+  background-color: #737749e3;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  position: sticky;
+  width: 100%;
   top: 0;
   z-index: 100;
-  flex-wrap: wrap; /* allow wrapping on small screens */
+  box-sizing: border-box; /* ensures padding doesn’t shrink width */
+  position: relative;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
@@ -64,7 +66,7 @@
 }
 
 .nav-links a:hover {
-  color: #3b82f6;
+  color: #6a7256ea;
 }
 
 /* Profile + Cart */
@@ -77,7 +79,7 @@
 /* Buttons */
 .logbtn,
 .cart-btn {
-  background-color: #3b82f6;
+  background-color: #4f5839;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -89,7 +91,7 @@
 
 .logbtn:hover,
 .cart-btn:hover {
-  background-color: #2563eb;
+  background-color: #6a7256ea;
 }
 
 /* Profile pic */
@@ -104,7 +106,7 @@
   height: 38px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #3b82f6;
+  border: 2px solid #4f5839;
   transition: 0.2s ease;
 }
 
@@ -114,54 +116,82 @@
 
 /* ===================== HERO SECTION ===================== */
 .hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #ffffff;
+  position: relative;
+  width: 100%;
+  height: 80vh; /* default height */
+  min-height: 400px; /* ensures visibility on small screens */
+  overflow: hidden;
+}
+
+.hero-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-banner {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Hero Image Responsive */
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;       /* cover the container */
+  object-position: center; /* center the image */
+  display: block;
+}
+
+/* ===================== HERO CONTENT ===================== */
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  color: #4f5839;
   text-align: center;
-  padding: 6rem 2rem;
-  border-radius: 12px;
-  margin: 1rem 2rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  padding: 0 1rem; /* padding for mobile screens */
 }
 
-.hero h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
+.hero-content h1 {
+  font-size: clamp(1.8rem, 5vw, 3rem); /* responsive text */
 }
 
-.hero p {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-  color: #e0e7ff;
+.hero-content p {
+  font-size: clamp(1rem, 2.5vw, 1.2rem); /* responsive text */
 }
 
-.hero button {
-  background-color: #3b82f6;
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+.hero-content button {
+  margin-top: 20px;
+  background: #4f5839b6;
+  color: #070101;
+  font-weight: bold;
+  border: none;
+  padding: 12px 22px;
   border-radius: 8px;
   cursor: pointer;
-  border: none;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
-.hero button:hover {
-  background-color: #2563eb;
+.hero-content button:hover {
+  background: #6a7256;
   transform: scale(1.05);
 }
 
 /* ===================== SEARCH & FILTERS ===================== */
 .flex.flex-col.md\:flex-row {
   display: flex;
-  justify-content: center; /* center horizontally */
-  align-items: center;     /* center vertically */
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
   margin-bottom: 2rem;
 }
 
-/* Input & Select */
 .flex.flex-col.md\:flex-row input,
 .flex.flex-col.md\:flex-row select {
   border: 1px solid #cbd5e1;
@@ -173,11 +203,10 @@
 
 .flex.flex-col.md\:flex-row input:focus,
 .flex.flex-col.md\:flex-row select:focus {
-  border-color: #3b82f6;
+  border-color: #737749e3;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
-/* Price Inputs */
 .flex.flex-col.md\:flex-row .flex.gap-2 input {
   width: 80px;
 }
@@ -188,81 +217,6 @@
   grid-template-columns: 1fr;
   gap: 1rem;
 }
-/* HERO SLIDER */
-.hero-slider {
-  position: relative;
-  width: 100%;
-  height: 80vh;
-  overflow: hidden;
-}
-
-/* Slides Container (6 slides for looping) */
-.slides {
-  display: flex;
-  width: calc(100% * 6);
-  height: 100%;
-  animation: infiniteSlide 20s linear infinite;
-}
-
-/* Each slide */
-.slide {
-  width: 100%;
-  height: 100%;
-  flex-shrink: 0;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: #111; /* fills empty areas */
-}
-
-
-/* Smooth infinite horizontal motion */
-@keyframes infiniteSlide {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%); /* Move by half since slides are duplicated */
-  }
-}
-
-/* Text Overlay */
-.hero-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: white;
-  z-index: 10;
-}
-
-.hero-overlay h1 {
-  font-size: 3rem;
-  font-weight: bold;
-}
-
-.hero-overlay span {
-  color: #38bdf8;
-}
-
-.hero-overlay p {
-  margin-top: 10px;
-  font-size: 1.2rem;
-}
-
-.hero-overlay button {
-  margin-top: 20px;
-  background-color: #2563eb;
-  padding: 12px 25px;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-}
-.hero-overlay button:hover {
-  background-color: #1d4ed8;
-}
-
 
 @media (min-width: 640px) {
   .grid {
@@ -330,7 +284,7 @@
 
 .grid button {
   margin-top: auto;
-  background-color: #3b82f6;
+  background-color: #4f5839;
   color: #fff;
   padding: 0.4rem;
   font-size: 0.9rem;
@@ -341,8 +295,36 @@
 }
 
 .grid button:hover {
-  background-color: #2563eb;
+  background-color: #4f5839c8;
+
 }
+/* ===================== EMPTY STATE ===================== */
+.no-products {
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* horizontal centering */
+  justify-content: center; /* vertical centering */
+  text-align: center;
+  min-height: 200px;
+  padding: 4rem 0;
+}
+
+.no-products span {
+  font-size: 3.5rem; /* Tailwind 6xl equivalent */
+  margin-bottom: 1rem;
+}
+
+.no-products h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.no-products p {
+  color: #000000;
+}
+
 
 /* ===================== PAGINATION ===================== */
 .flex.justify-center {
@@ -379,7 +361,7 @@
 }
 
 .feature {
-  background: #3b82f6;
+  background: #3f462d;
   border-radius: 12px;
   padding: 2rem;
   width: 260px;
@@ -408,7 +390,7 @@
 .footer {
   text-align: center;
   padding: 1.5rem 2rem;
-  background-color: #1e3a8a;
+  background-color: #3f462d;
   color: #ffffff;
 }
 
@@ -436,5 +418,40 @@
     width: 100%;
     justify-content: center;
     margin-bottom: 0.5rem;
+  }
+}
+
+/* ===================== HERO IMAGE MEDIA QUERIES ===================== */
+@media (max-width: 1024px) {
+  .hero {
+    height: 60vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    height: 55vh;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    height: 50vh;
+  }
+
+  .hero-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .hero-content p {
+    font-size: 0.9rem;
   }
 }

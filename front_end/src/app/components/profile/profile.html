@@ -1,6 +1,5 @@
 <div class="profile-modal-backdrop" style="z-index: 1000;" *ngIf="isOpen" (click)="closeProfile()">
   <div class="profile-modal-content" (click)="stopPropagation($event)">
-
     <div class="profile-header">
       <div class="image-container">
         <img [src]="formData.image || user?.image || 'assets/profile.jpg'" alt="Profile" class="profile-img">
@@ -32,7 +31,7 @@
       <button *ngIf="!editing" (click)="editProfile()">Edit</button>
       <button *ngIf="editing" (click)="saveProfile()">Save</button>
       <button *ngIf="editing" (click)="cancelEdit()">Cancel</button>
-      <button *ngIf="!editing" (click)="logout()" style="background-color: red;">Logout</button>
+      <button *ngIf="!editing" (click)="logout()" style="background-color: red; ">Logout</button>
       <button (click)="closeProfile()">Close</button>
     </div>
 

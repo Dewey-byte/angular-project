@@ -31,43 +31,42 @@
         <!-- Cart Button -->
         <button class="cart-btn" (click)="cartModal.openCart()">🛒</button>
 
+
       </div>
     </div>
   </header>
 
   <!-- ===================== HERO SECTION ===================== -->
-  <section class="hero-slider">
+  <section class="hero">
+    <div class="hero-container">
 
-    <div class="slides">
+      <div class="hero-banner">
+        <img src="assets/hero1.png" alt="Hero Image" class="hero-image">
+      </div>
 
-      <!-- Duplicate images to make infinite loop seamless -->
-      <div class="slide" style="background-image: url('assets/hero1.png');"></div>
-      <div class="slide" style="background-image: url('assets/hero2.png');"></div>
-      <div class="slide" style="background-image: url('assets/hero3.png');"></div>
+      <!-- Content on Top -->
+      <div class="hero-content">
+     <div style="background-color: rgba(240, 240, 240, 0.752); border-radius:10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <h1>Welcome to <span>LibroTrack</span></h1>
+        <p>Your smart online bookstore and e-commerce platform.</p>
+      </div>
+        <button (click)="scrollToProducts()">Start Shopping</button>
 
-      <!-- Duplicate slides for smooth infinite looping -->
-      <div class="slide" style="background-image: url('assets/hero1.png');"></div>
-      <div class="slide" style="background-image: url('assets/hero2.png');"></div>
-      <div class="slide" style="background-image: url('assets/hero3.png');"></div>
-
-    </div>
-
-    <div class="hero-overlay">
-      <h1>Welcome to <span>LibroTrack</span></h1>
-      <p>Your smart online bookstore and e-commerce platform.</p>
-      <button (click)="scrollToProducts()">Start Shopping</button>
+      </div>
     </div>
 
   </section>
 
+
+
   <!-- ===================== PRODUCTS SECTION ===================== -->
-  <section id="products" class="py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section id="products" class="py-16" style="background-color: #737749e3;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" >
 
       <!-- Section Title -->
       <div class="text-center mb-12">
         <h2 class="text-3xl font-bold mb-4" style="color: #1e293b; justify-content: center; align-items: center; display: flex; ">Our Products</h2>
-        <p class="text-lg" style="color: #64748b; justify-content: center; align-items: center; display: flex;">
+        <p class="text-lg" style="color: #2b3b52; justify-content: center; align-items: center; display: flex;">
           Carefully selected books and stationery for every reader and writer
         </p>
       </div>
@@ -90,8 +89,8 @@
           (change)="applyFilters()"
           class="px-4 py-2 border rounded-lg"
         >
-          <option value="" >All Categories</option>
-          <option value="Books">📚 Books</option>
+          <option value="all" >All Categories</option>
+          <option value="Book">📚 Book</option>
           <option value="Stationery">✏️ Stationery</option>
         </select>
 
@@ -142,12 +141,14 @@
         </div>
       </div>
 
-      <!-- No Products Found -->
-      <div *ngIf="paginatedProducts.length === 0" class="text-center py-16">
-        <span class="text-6xl mb-4 block">🏪</span>
-        <h3 class="text-xl font-semibold mb-2" style="color: #374151;">No Products Found</h3>
-        <p style="color: #6b7280;">Try adjusting your search or filters.</p>
-      </div>
+     <!-- No Products Found -->
+     <div *ngIf="paginatedProducts.length === 0" class="no-products">
+      <span>🏪</span>
+      <h3>No Products Found</h3>
+      <p>Try adjusting your search or filters.</p>
+    </div>
+
+
 
       <!-- ===================== PAGINATION ===================== -->
       <div class="flex justify-center items-center mt-10 space-x-4">
@@ -174,7 +175,7 @@
   </section>
 
   <!-- ===================== FEATURES SECTION ===================== -->
-  <section class="features">
+  <section id="about" class="features" style="background-color: #737749e3;">
     <div class="feature">
       <h3>🛒 Browse Products</h3>
       <p>Explore a wide range of books and stationery for every need.</p>

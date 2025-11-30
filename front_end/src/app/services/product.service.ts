@@ -20,5 +20,8 @@ export class ProductService {
     return this.http.delete<void>(`${this.apiUrl}/products/${id}`);
 
   }
+  getFilters(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/filters`);
+  }
 
 }

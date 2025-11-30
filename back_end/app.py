@@ -27,9 +27,13 @@ app.register_blueprint(profile, url_prefix="/profile")
 app.register_blueprint(cart, url_prefix="/cart")
 app.register_blueprint(products_bp, url_prefix="/products")
 
+
+
+
 # Serve uploaded images
 UPLOAD_FOLDER = os.path.join(os.getcwd(), "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 
 @app.route("/uploads/<filename>")
 def uploaded_file(filename):

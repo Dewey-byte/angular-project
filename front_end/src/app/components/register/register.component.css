@@ -27,8 +27,8 @@
   right: 15px;
   cursor: pointer;
   font-size: 22px;
-  color: #87CEEB;
-  background: #e0f7ff;
+  color: #737749d6;
+  background: #cfd3a7b2;
   border: none;
   border-radius: 50%;
   width: 35px;
@@ -40,7 +40,7 @@
 }
 
 .close:hover {
-  background: #00BFFF;
+  background: #737749;
   color: #fff;
 }
 
@@ -66,12 +66,12 @@
 }
 
 .modal-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+  border-color: #737749;
+  box-shadow: 0 0 5px rgba(57, 82, 56, 0.3);
 }
 
 .modal-btn {
-  background: #3b82f6;
+  background: #737749e3;
   color: white;
   padding: 12px;
   border: none;
@@ -79,10 +79,11 @@
   font-size: 16px;
   cursor: pointer;
   font-weight: 500;
+  transition: background 0.2s ease;
 }
 
 .modal-btn:hover {
-  background: #2563eb;
+  background: #737749;
 }
 
 .modal-footer {
@@ -95,14 +96,15 @@
 .modal-link {
   background: none;
   border: none;
-  color: #3b82f6;
+  color: #737749e3;
   font-weight: 600;
   cursor: pointer;
+  transition: color 0.2s;
 }
 
 .modal-link:hover {
   text-decoration: underline;
-  color: #1e40af;
+  color:#737749e3;
 }
 .password-wrapper {
   position: relative;
@@ -123,11 +125,22 @@
   border: none;
   cursor: pointer;
   font-size: 18px; /* eye icon size */
-  color: #007BFF;
+  color: #737749e3;
   user-select: none;
   transition: transform 0.1s;
 }
 
 .show-password-btn:active {
   transform: translateY(-50%) scale(0.9); /* optional click/blink effect */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }

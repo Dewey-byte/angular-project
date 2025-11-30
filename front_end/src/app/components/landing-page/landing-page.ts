@@ -14,33 +14,58 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./landing-page.css'],
   standalone: true,
   imports: [
-    RouterModule, LoginComponent, RegisterComponent,
-    CartComponent, Profile, NgIf, FormsModule, CommonModule, NgFor
+    RouterModule,
+    LoginComponent,
+    RegisterComponent,
+    CartComponent,
+    Profile,
+    NgIf,
+    FormsModule,
+    CommonModule,
+    NgFor
   ]
 })
 export class LandingPage implements AfterViewInit {
 
+  // -------------------------------
+  // MODAL REFERENCES
+  // -------------------------------
   @ViewChild('loginModal') loginModal!: LoginComponent;
   @ViewChild('registerModal') registerModal!: RegisterComponent;
   @ViewChild('cartModal') cartModal!: CartComponent;
   @ViewChild('profileModal') profileModal!: Profile;
 
+  // -------------------------------
+  // USER STATE
+  // -------------------------------
   isLoggedIn = false;
   userImage: string = 'assets/profile.jpg';
 
+  // -------------------------------
+  // SLIDER VARIABLES (optional)
+  // -------------------------------
   currentSlide = 0;
   slides: NodeListOf<HTMLImageElement> = [] as any;
 
+  // -------------------------------
+  // PRODUCTS
+  // -------------------------------
   products: any[] = [];
   paginatedProducts: any[] = [];
-
   backendURL = "http://127.0.0.1:5000/products";
 
+  // -------------------------------
+  // FILTER VARIABLES
+  // -------------------------------
+  categories: string[] = []; // Categories from backend
   searchText = "";
   selectedCategory = "all";
   minPrice: number | null = null;
   maxPrice: number | null = null;
 
+  // -------------------------------
+  // PAGINATION VARIABLES
+  // -------------------------------
   currentPage = 1;
   itemsPerPage = 16;
   totalPages = 1;
@@ -48,39 +73,93 @@ export class LandingPage implements AfterViewInit {
   constructor(public auth: AuthService) {}
 
   ngOnInit() {
-    // Subscribe to reactive login state
+    // Subscribe to login state
     this.auth.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
     this.auth.userImage$.subscribe(img => this.userImage = img);
 
-    // Initial load
+    // Load categories and min/max prices
+    this.loadFilters();
+
+    // Initial load of products
     this.loadProducts();
   }
 
   ngAfterViewInit() {
-    this.slides = document.querySelectorAll('.hero-slideshow .slide');
-    setInterval(() => this.nextSlide(), 8000);
+    // Optional: slider or other view initialization
   }
 
-  nextSlide() {
-    if (!this.slides.length) return;
-    this.slides[this.currentSlide].classList.remove('active');
-    this.currentSlide = (this.currentSlide + 1) % this.slides.length;
-    this.slides[this.currentSlide].classList.add('active');
+  // ==========================
+  // LOAD FILTERS FROM BACKEND
+  // ==========================
+  loadFilters() {
+    fetch(`${this.backendURL}/filters`)
+      .then(res => res.ok ? res.json() : Promise.reject(`Server returned ${res.status}`))
+      .then((data: any) => {
+        this.categories = data.categories || [];
+        // Set default min/max price
+        this.minPrice = data.min_price ?? 0;
+        this.maxPrice = data.max_price ?? 0;
+        console.log("Loaded filters:", data);
+      })
+      .catch(err => {
+        console.error("Error loading filters:", err);
+        this.categories = [];
+      });
   }
 
+  // ==========================
+  // APPLY FILTERS
+  // ==========================
+  applyFilters() {
+    // Ensure min/max are numbers
+    this.minPrice = this.parseNumber(this.minPrice);
+    this.maxPrice = this.parseNumber(this.maxPrice);
+
+    // Swap if min > max
+    if (this.minPrice !== null && this.maxPrice !== null && this.minPrice > this.maxPrice) {
+      [this.minPrice, this.maxPrice] = [this.maxPrice, this.minPrice];
+    }
+
+    // Ensure category is set
+    this.selectedCategory = this.selectedCategory || 'all';
+
+    // Debug
+    console.log("Applying filters:", {
+      search: this.searchText,
+      category: this.selectedCategory,
+      minPrice: this.minPrice,
+      maxPrice: this.maxPrice
+    });
+
+    // Reload products
+    this.loadProducts();
+  }
 
   // -------------------------------
-  // FILTERS
+  // HELPER TO PARSE NUMBERS
   // -------------------------------
+  private parseNumber(value: any): number | null {
+    if (value === '' || value === null) return null;
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  // ==========================
+  // LOAD PRODUCTS FROM BACKEND
+  // ==========================
   loadProducts() {
     const params = new URLSearchParams();
 
+    // Apply search filter
     if (this.searchText?.trim()) params.set('search', this.searchText.trim());
+    // Apply category filter
     if (this.selectedCategory && this.selectedCategory !== 'all') params.set('category', this.selectedCategory);
+    // Apply price filters
     if (this.minPrice !== null) params.set('min_price', String(this.minPrice));
     if (this.maxPrice !== null) params.set('max_price', String(this.maxPrice));
 
-    const url = `${this.backendURL}?${params.toString()}`;
+    const url = `${this.backendURL}/filter?${params.toString()}`;
+    console.log("Fetching products from URL:", url);
 
     fetch(url)
       .then(res => res.ok ? res.json() : Promise.reject(`Server returned ${res.status}`))
@@ -99,29 +178,9 @@ export class LandingPage implements AfterViewInit {
       });
   }
 
-  applyFilters() {
-    // Ensure numeric min/max
-    this.selectedCategory = this.selectedCategory || 'all';
-    this.minPrice = this.parseNumber(this.minPrice);
-    this.maxPrice = this.parseNumber(this.maxPrice);
-
-    // Swap if min > max
-    if (this.minPrice !== null && this.maxPrice !== null && this.minPrice > this.maxPrice) {
-      [this.minPrice, this.maxPrice] = [this.maxPrice, this.minPrice];
-    }
-
-    this.loadProducts();
-  }
-
-  private parseNumber(value: any): number | null {
-    if (value === '' || value === null) return null;
-    const n = Number(value);
-    return Number.isFinite(n) ? n : null;
-  }
-
-  // -------------------------------
-  // PAGINATION
-  // -------------------------------
+  // ==========================
+  // PAGINATION METHODS
+  // ==========================
   paginate() {
     this.totalPages = Math.max(1, Math.ceil(this.products.length / this.itemsPerPage));
     this.currentPage = Math.min(Math.max(this.currentPage, 1), this.totalPages);
@@ -134,35 +193,22 @@ export class LandingPage implements AfterViewInit {
   nextPage() { if (this.currentPage < this.totalPages) { this.currentPage++; this.paginate(); } }
   prevPage() { if (this.currentPage > 1) { this.currentPage--; this.paginate(); } }
 
-  // -------------------------------
-  // ADD TO CART
-  // -------------------------------
+  // ==========================
+  // CART METHODS
+  // ==========================
   async addToCart(product: any) {
-    if (!this.isLoggedIn) {
-      this.openLogin();
-      return;
-    }
-
-    if (!product?.Product_ID) {
-      console.error('Invalid product', product);
-      return;
-    }
+    if (!this.isLoggedIn) { this.openLogin(); return; }
+    if (!product?.Product_ID) { console.error('Invalid product', product); return; }
 
     const token = this.auth.getToken();
-    if (!token) {
-      alert("Please log in first.");
-      return;
-    }
+    if (!token) { alert("Please log in first."); return; }
 
     const payload = { product_id: product.Product_ID, quantity: 1 };
 
     try {
       const res = await fetch("http://127.0.0.1:5000/cart/add", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify(payload)
       });
 
@@ -180,14 +226,18 @@ export class LandingPage implements AfterViewInit {
     }
   }
 
-  // -------------------------------
-  // MODAL HELPERS + SCROLL
-  // -------------------------------
+  // ==========================
+  // MODAL HELPERS
+  // ==========================
   openLogin() { this.loginModal?.openModal(); }
   openRegister() { this.registerModal?.openModal(); }
   openProfile() { this.profileModal?.openProfile(); }
 
+  // ==========================
+  // SCROLL TO PRODUCTS
+  // ==========================
   scrollToProducts() {
     document.getElementById('products')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+
 }

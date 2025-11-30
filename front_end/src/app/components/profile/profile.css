@@ -26,6 +26,7 @@
   gap: 10px;
 }
 
+
 .image-container {
   position: relative;
 }
@@ -41,7 +42,7 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  background: #007bff;
+  background: #737749e3 ;
   color: white;
   border-radius: 50%;
   padding: 5px;
@@ -66,12 +67,12 @@
   padding: 8px 12px;
   border: none;
   border-radius: 8px;
-  background: #007bff;
+  background: #737749e3;
   color: white;
   cursor: pointer;
   transition: 0.2s;
 }
 
 .modal-footer button:hover {
-  background: #0056b3;
+  background: #737749b1;
 }
