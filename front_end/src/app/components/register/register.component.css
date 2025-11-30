@@ -1,3 +1,4 @@
+/* ===================== BASE MODAL STYLES ===================== */
 .modal {
   position: fixed;
   top: 0;
@@ -9,30 +10,38 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
   background: #ffffff;
-  padding: 30px 25px;
-  width: 400px;
-  max-width: 90%;
+  padding: 20px 18px; /* smaller padding */
+  width: 320px; /* smaller width */
+  max-width: 85%;
   border-radius: 12px;
   position: relative;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  animation: slideDown 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-content:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
 }
 
 .close {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 12px;
+  right: 12px;
   cursor: pointer;
-  font-size: 22px;
+  font-size: 20px;
   color: #737749d6;
   background: #cfd3a7b2;
   border: none;
   border-radius: 50%;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,51 +54,54 @@
 }
 
 .modal-title {
-  margin-bottom: 20px;
-  font-size: 24px;
+  margin-bottom: 15px;
+  font-size: 20px;
   font-weight: 600;
   text-align: center;
+  color: #3a5238;
 }
 
 .modal-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .modal-input {
-  padding: 12px 15px;
-  border-radius: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
   border: 1px solid #d1d5db;
-  font-size: 16px;
+  font-size: 15px;
   outline: none;
+  transition: all 0.2s ease;
 }
 
 .modal-input:focus {
   border-color: #737749;
-  box-shadow: 0 0 5px rgba(57, 82, 56, 0.3);
+  box-shadow: 0 0 6px rgba(115, 119, 73, 0.3);
 }
 
 .modal-btn {
   background: #737749e3;
   color: white;
-  padding: 12px;
+  padding: 10px;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 6px;
+  font-size: 15px;
   cursor: pointer;
   font-weight: 500;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .modal-btn:hover {
   background: #737749;
+  transform: translateY(-1px);
 }
 
 .modal-footer {
-  margin-top: 15px;
+  margin-top: 10px;
   text-align: center;
-  font-size: 14px;
+  font-size: 13px;
   color: #6b7280;
 }
 
@@ -104,43 +116,73 @@
 
 .modal-link:hover {
   text-decoration: underline;
-  color:#737749e3;
+  color: #737749e3;
 }
+
 .password-wrapper {
   position: relative;
 }
 
 .password-wrapper input {
   width: 100%;
-  padding-right: 40px; /* Make space for the eye icon */
+  padding-right: 35px;
   box-sizing: border-box;
 }
 
 .show-password-btn {
   position: absolute;
-  right: 10px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px; /* eye icon size */
+  font-size: 16px;
   color: #737749e3;
   user-select: none;
   transition: transform 0.1s;
 }
 
 .show-password-btn:active {
-  transform: translateY(-50%) scale(0.9); /* optional click/blink effect */
+  transform: translateY(-50%) scale(0.9);
 }
 
-/* Animations */
+/* ===================== ANIMATIONS ===================== */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
 @keyframes slideDown {
-  from { transform: translateY(-20px); opacity: 0; }
+  from { transform: translateY(-15px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+
+/* ===================== MEDIA QUERIES (MOBILE RESPONSIVE) ===================== */
+@media (max-width: 480px) {
+  .modal-content {
+    width: 90%;
+    padding: 18px 15px;
+    border-radius: 10px;
+  }
+
+  .modal-title {
+    font-size: 18px;
+  }
+
+  .modal-input {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  .modal-btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .close {
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+  }
 }

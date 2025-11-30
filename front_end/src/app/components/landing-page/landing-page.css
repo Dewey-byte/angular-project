@@ -66,7 +66,8 @@
 }
 
 .nav-links a:hover {
-  color: #6a7256ea;
+  color: #474f32ea;
+  transform: scale(1.1);
 }
 
 /* Profile + Cart */
@@ -91,7 +92,8 @@
 
 .logbtn:hover,
 .cart-btn:hover {
-  background-color: #6a7256ea;
+  background-color: #474f32ea;
+  transform: scale(1.1);
 }
 
 /* Profile pic */
@@ -214,7 +216,7 @@
 /* ===================== PRODUCT GRID ===================== */
 .grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 2fr;
   gap: 1rem;
 }
 
@@ -395,7 +397,13 @@
 }
 
 /* ===================== RESPONSIVE HEADER BUTTONS ===================== */
-@media (max-width: 640px) {
+@media (max-width: 700px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    display: flex;
+  }
   .nav-profile-cart {
     width: 100%;
     justify-content: center;

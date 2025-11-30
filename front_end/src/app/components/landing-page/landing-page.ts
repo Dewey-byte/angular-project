@@ -96,16 +96,19 @@ export class LandingPage implements AfterViewInit {
       .then(res => res.ok ? res.json() : Promise.reject(`Server returned ${res.status}`))
       .then((data: any) => {
         this.categories = data.categories || [];
-        // Set default min/max price
-        this.minPrice = data.min_price ?? 0;
-        this.maxPrice = data.max_price ?? 0;
+        // Set default min/max price to empty
+        this.minPrice = null;
+        this.maxPrice = null;
         console.log("Loaded filters:", data);
       })
       .catch(err => {
         console.error("Error loading filters:", err);
         this.categories = [];
+        this.minPrice = null;
+        this.maxPrice = null;
       });
   }
+
 
   // ==========================
   // APPLY FILTERS

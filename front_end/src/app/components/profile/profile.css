@@ -1,78 +1,151 @@
+/* ===================== OVERLAY ===================== */
 .profile-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
 }
 
+/* ===================== MODAL BOX ===================== */
 .profile-modal-content {
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  width: 360px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px 16px;
+  width: 320px; /* smaller, compact modal */
   max-width: 90%;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
+  animation: slideDown 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.profile-modal-content:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* ===================== HEADER ===================== */
 .profile-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
-
+/* ===================== IMAGE ===================== */
 .image-container {
   position: relative;
 }
 
 .profile-img {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #737749;
+  transition: transform 0.2s;
+}
+
+.profile-img:hover {
+  transform: scale(1.05);
 }
 
 .upload-btn {
   position: absolute;
   bottom: 0;
   right: 0;
-  background: #737749e3 ;
+  background: #737749e3;
   color: white;
   border-radius: 50%;
   padding: 5px;
   cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s, transform 0.1s;
 }
 
+.upload-btn:hover {
+  background: #737749b1;
+  transform: scale(1.1);
+}
+
+/* ===================== DETAILS ===================== */
 .profile-details input {
-  width: 100%;
-  padding: 8px;
+  width: 94%;
+  padding: 8px 10px;
   margin-bottom: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
 }
 
+.profile-details input:focus {
+  border-color: #737749;
+  box-shadow: 0 0 5px rgba(115, 119, 73, 0.3);
+}
+
+/* ===================== FOOTER BUTTONS ===================== */
 .modal-footer {
   display: flex;
   justify-content: space-between;
-  gap: 5px;
+  gap: 6px;
 }
 
 .modal-footer button {
-  padding: 8px 12px;
+  flex: 1;
+  padding: 8px 10px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   background: #737749e3;
   color: white;
+  font-size: 14px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: background 0.2s, transform 0.1s;
 }
 
 .modal-footer button:hover {
   background: #737749b1;
+  transform: translateY(-1px);
+}
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-15px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ===================== MOBILE RESPONSIVE ===================== */
+@media (max-width: 480px) {
+  .profile-modal-content {
+    width: 90%;
+    padding: 16px 14px;
+    border-radius: 12px;
+  }
+
+  .profile-img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profile-details input {
+    font-size: 13px;
+    padding: 7px 8px;
+  }
+
+  .modal-footer button {
+    font-size: 13px;
+    padding: 7px 8px;
+  }
 }
