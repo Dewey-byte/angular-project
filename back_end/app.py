@@ -7,6 +7,9 @@ from routes.user_routes import user
 from routes.profile_routes import profile
 from routes.cart import cart
 from routes.products import products_bp
+from routes.orders import orders_bp
+from routes.order_details import order_details_bp
+from routes.inventory_log import inventory_log_bp
 from config import Config
 import os
 
@@ -26,6 +29,9 @@ app.register_blueprint(user, url_prefix="/user")
 app.register_blueprint(profile, url_prefix="/profile")
 app.register_blueprint(cart, url_prefix="/cart")
 app.register_blueprint(products_bp, url_prefix="/products")
+app.register_blueprint(orders_bp, url_prefix="/orders")
+app.register_blueprint(order_details_bp, url_prefix="/order_details")
+app.register_blueprint(inventory_log_bp, url_prefix="/inventory_log")
 
 
 

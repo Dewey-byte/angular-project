@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from database.connection import get_db
@@ -176,4 +177,76 @@ def remove_cart(cart_id):
         if 'cur' in locals():
             cur.close()
         if 'db' in locals():
+            db.close()
+
+# -------------------------------
+# CHECKOUT CART
+# -------------------------------
+@cart.route("/checkout", methods=["POST"])
+@jwt_required()
+def checkout_cart():
+    db = None
+    cur = None
+    try:
+        user_id = get_jwt_identity()
+        if not user_id:
+            return jsonify({"error": "Invalid user"}), 401
+
+        db = get_db()
+        cur = db.cursor()  # ensure dict results
+
+        # 1. Fetch all cart items
+        cur.execute("""
+            SELECT c.cart_id, c.product_id, c.quantity, p.Price AS price
+            FROM cart c
+            JOIN products p ON c.product_id = p.Product_ID
+            WHERE c.user_id = %s
+        """, (user_id,))
+        cart_items = cur.fetchall()
+
+        if not cart_items:
+            return jsonify({"error": "Cart is empty"}), 400
+
+        # 2. Calculate total amount
+        total_amount = sum(float(item["price"]) * int(item["quantity"]) for item in cart_items)
+
+        # 3. Insert new order
+        order_date = datetime.now()
+        order_status = "Pending"
+
+        cur.execute("""
+            INSERT INTO orders (User_ID, Order_Date, Total_Amount, Order_Status)
+            VALUES (%s, %s, %s, %s)
+        """, (user_id, order_date, total_amount, order_status))
+
+        order_id = cur.lastrowid
+
+        # 4. Insert order_details with Subtotal
+        for item in cart_items:
+            subtotal = float(item["price"]) * int(item["quantity"])
+
+            cur.execute("""
+                INSERT INTO order_details (Order_ID, Product_ID, Quantity, Subtotal)
+                VALUES (%s, %s, %s, %s)
+            """, (order_id, item["product_id"], item["quantity"], subtotal))
+
+        # 5. Clear user's cart
+        cur.execute("DELETE FROM cart WHERE user_id = %s", (user_id,))
+
+        db.commit()
+
+        return jsonify({
+            "message": "Checkout successful",
+            "Order_ID": order_id,
+            "total_amount": round(total_amount, 2)
+        }), 201
+
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": f"Checkout failed: {str(e)}"}), 500
+
+    finally:
+        if cur:
+            cur.close()
+        if db:
             db.close()

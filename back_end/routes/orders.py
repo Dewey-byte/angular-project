@@ -1,0 +1,136 @@
+from flask import Blueprint, request, jsonify
+from database.connection import get_db   # make sure this points to your get_db() file
+from datetime import datetime
+
+orders_bp = Blueprint('orders', __name__)
+
+# ============================================================
+# GET ALL ORDERS
+# ============================================================
+@orders_bp.route('/', methods=['GET'])
+def get_all_orders():
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM orders")
+    orders = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify(orders), 200
+
+# ============================================================
+# GET ONE ORDER BY ID
+# ============================================================
+@orders_bp.route('/<int:order_id>', methods=['GET'])
+def get_order(order_id):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM orders WHERE Order_ID = %s", (order_id,))
+    order = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if not order:
+        return jsonify({"error": "Order not found"}), 404
+
+    return jsonify(order), 200
+
+# ============================================================
+# CREATE ORDER
+# ============================================================
+@orders_bp.route('/', methods=['POST'])
+def create_order():
+    data = request.get_json()
+
+    if not data or "User_ID" not in data:
+        return jsonify({"error": "User_ID is required"}), 400
+
+    User_ID = data["User_ID"]
+    Total_Amount = data.get("Total_Amount", 0.00)
+    Order_Status = data.get("Order_Status", "Pending")
+    Order_Date = datetime.now()
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    sql = """
+        INSERT INTO orders (User_ID, Order_Date, Total_Amount, Order_Status)
+        VALUES (%s, %s, %s, %s)
+    """
+    cursor.execute(sql, (User_ID, Order_Date, Total_Amount, Order_Status))
+    conn.commit()
+
+    new_id = cursor.lastrowid
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({"message": "Order created", "Order_ID": new_id}), 201
+
+# ============================================================
+# UPDATE ORDER
+# ============================================================
+@orders_bp.route('/<int:order_id>', methods=['PUT'])
+def update_order(order_id):
+    data = request.get_json()
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Check if order exists
+    cursor.execute("SELECT * FROM orders WHERE Order_ID = %s", (order_id,))
+    order = cursor.fetchone()
+
+    if not order:
+        cursor.close()
+        conn.close()
+        return jsonify({"error": "Order not found"}), 404
+
+    # Update fields
+    User_ID = data.get("User_ID", order["User_ID"])
+    Total_Amount = data.get("Total_Amount", order["Total_Amount"])
+    Order_Status = data.get("Order_Status", order["Order_Status"])
+
+    sql = """
+        UPDATE orders
+        SET User_ID = %s,
+            Total_Amount = %s,
+            Order_Status = %s
+        WHERE Order_ID = %s
+    """
+
+    cursor.execute(sql, (User_ID, Total_Amount, Order_Status, order_id))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({"message": "Order updated successfully"}), 200
+
+# ============================================================
+# DELETE ORDER
+# ============================================================
+@orders_bp.route('/<int:order_id>', methods=['DELETE'])
+def delete_order(order_id):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM orders WHERE Order_ID = %s", (order_id,))
+    order = cursor.fetchone()
+
+    if not order:
+        cursor.close()
+        conn.close()
+        return jsonify({"error": "Order not found"}), 404
+
+    cursor.execute("DELETE FROM orders WHERE Order_ID = %s", (order_id,))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({"message": "Order deleted successfully"}), 200
