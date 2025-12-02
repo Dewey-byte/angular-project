@@ -30,6 +30,9 @@ export class AdminService {
   deleteProduct(id: number): Observable<any> {
     return this.http.delete(`${this.baseURL}/products/${id}`);
   }
+  getOrders(): Observable<any> {
+    return this.http.get(`${this.baseURL}/orders`);
+  }
 
   // INVENTORY LOGS
   getInventoryLogs(): Observable<any> {

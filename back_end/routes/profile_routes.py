@@ -5,17 +5,25 @@ import MySQLdb
 import os
 
 app = Flask(__name__)
-app.config["JWT_SECRET_KEY"] = "your-secret-key"
-app.config["UPLOAD_FOLDER"] = "uploads"
+
+# --------------------------- Config ---------------------------
+app.config["JWT_SECRET_KEY"] = "your-secret-key"  # JWT secret key
+app.config["UPLOAD_FOLDER"] = "uploads"           # Folder to store uploaded profile images
+
 jwt = JWTManager(app)
 
+# Allow requests from Angular frontend running at localhost:4200
 CORS(app, origins="http://localhost:4200")
 
 # Ensure uploads folder exists
 if not os.path.exists("uploads"):
     os.makedirs("uploads")
 
+# --------------------------- Database connection ---------------------------
 def get_db_connection():
+    """
+    Connect to the MySQL database and return the connection object.
+    """
     return MySQLdb.connect(
         host="localhost",
         user="root",
@@ -32,6 +40,12 @@ profile = Blueprint("profile", __name__)
 @profile.route("/profile", methods=["GET"])
 @jwt_required()
 def get_profile():
+    """
+    Get the profile information of the logged-in user.
+    JWT is used to get user_id.
+    Returns:
+        JSON object with user profile data or 404 if user not found.
+    """
     user_id = get_jwt_identity()
     db = get_db_connection()
     cursor = db.cursor()
@@ -60,11 +74,23 @@ def get_profile():
     return jsonify({"error": "User not found"}), 404
 
 # ------------------------------------------------------------------------
-# UPLOAD IMAGE (NEW!)
+# UPLOAD / EDIT PROFILE
 # ------------------------------------------------------------------------
 @profile.route("/profile/edit", methods=["PUT", "OPTIONS"])
 @jwt_required()
 def edit_profile():
+    """
+    Update the profile of the logged-in user.
+    Supports:
+        - Updating Full_Name, Email, Contact_Number, Address
+        - Uploading a new profile image
+    Steps:
+        1. Check if an image file is uploaded and save it to UPLOAD_FOLDER
+        2. If no new image, keep the old image
+        3. Update the Users table in MySQL
+    Returns:
+        JSON message with updated image URL
+    """
     if request.method == "OPTIONS":
         return '', 200
 
@@ -75,27 +101,23 @@ def edit_profile():
     contact = request.form.get("Contact_Number")
     address = request.form.get("Address")
 
-    # ---------------------------
-    # Handle File Upload
-    # ---------------------------
+    # --------------------------- Handle File Upload ---------------------------
     image_url = None
-
     if "image" in request.files:
         file = request.files["image"]
         if file.filename != "":
             filename = file.filename
             filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
 
+            # Save uploaded file
             file.save(filepath)
             image_url = f"http://localhost:5000/uploads/{filename}"
 
-    # If no new image, keep old one
+    # If no new image is uploaded, use the existing one
     if not image_url:
         image_url = request.form.get("Current_Image")
 
-    # ---------------------------
-    # Update database
-    # ---------------------------
+    # --------------------------- Update database ---------------------------
     db = get_db_connection()
     cursor = db.cursor()
     cursor.execute("""
@@ -109,7 +131,6 @@ def edit_profile():
     db.close()
 
     return jsonify({"message": "Profile updated successfully", "image_url": image_url}), 200
-
 
 
 if __name__ == "__main__":

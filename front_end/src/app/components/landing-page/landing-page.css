@@ -330,6 +330,9 @@
 
 /* ===================== PAGINATION ===================== */
 .flex.justify-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 2rem;
   gap: 1rem;
   flex-wrap: wrap;
