@@ -49,4 +49,9 @@ export class CartService {
       this.authHeaders()
     );
   }
+  // CHECKOUT cart
+  checkoutCart(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/checkout`, {}, this.authHeaders());
+  }
 }
+

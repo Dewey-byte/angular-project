@@ -1,17 +1,22 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
+import { CheckoutComponent } from '../checkout/checkout';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.html',
   styleUrls: ['./cart.css'],
-  imports: [NgFor, NgIf, FormsModule],
+  imports: [NgFor, NgIf, FormsModule, CheckoutComponent],
 })
 export class CartComponent {
   isOpen = false;
   cartItems: any[] = [];
+
+  @ViewChild('checkoutComp') checkoutComponent!: CheckoutComponent;
+
 
   // Swipe-to-close
   startX = 0;
@@ -69,6 +74,21 @@ export class CartComponent {
       return sum + price * qty;
     }, 0);
   }
+    // ✅ Updated Checkout function to open modal
+    checkout() {
+      if (this.cartItems.length === 0) {
+        Swal.fire('Cart is empty!');
+        return;
+      }
+
+      if (this.checkoutComponent) {
+        this.closeCart();           // Close cart drawer
+        this.checkoutComponent.openModal();  // Open checkout modal
+      }
+    }
+
+
+
 
   // Swipe-to-close methods
   onTouchStart(event: TouchEvent) {
@@ -94,4 +114,5 @@ export class CartComponent {
       if (modal) modal.style.transform = `translateX(0)`;
     }
   }
+
 }

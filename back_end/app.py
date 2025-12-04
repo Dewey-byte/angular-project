@@ -10,6 +10,7 @@ from routes.products import products_bp
 from routes.orders import orders_bp
 from routes.order_details import order_details_bp
 from routes.inventory_log import inventory_log_bp
+from routes.checkout_steps import checkout_steps_bp
 from config import Config
 import os
 
@@ -37,6 +38,7 @@ app.register_blueprint(products_bp, url_prefix="/products")
 app.register_blueprint(orders_bp, url_prefix="/orders")
 app.register_blueprint(order_details_bp, url_prefix="/order_details")
 app.register_blueprint(inventory_log_bp, url_prefix="/inventory_log")
+app.register_blueprint(checkout_steps_bp, url_prefix="/checkout")
 
 # --------------------------- Serve Uploaded Images ---------------------------
 # Ensure the uploads folder exists

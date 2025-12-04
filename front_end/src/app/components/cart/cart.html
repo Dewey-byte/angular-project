@@ -45,6 +45,7 @@
       <span>Total:</span>
       <strong>₱{{ getTotal() }}</strong>
     </div>
-    <button class="checkout-btn">Proceed to Checkout</button>
+    <button class="checkout-btn" (click)="checkout()">Checkout</button>
   </div>
 </div>
+<app-checkout #checkoutComp></app-checkout>

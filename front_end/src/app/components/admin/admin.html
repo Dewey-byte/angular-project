@@ -47,7 +47,6 @@
   <div class="bg-white rounded shadow tabs mb-6">
     <nav class="flex border-b">
       <button
-        class=""
         [class.active]="activeTab === 'products'"
         (click)="switchTab('products')">Products</button>
 
@@ -85,10 +84,10 @@
 
           <tbody>
             <tr *ngFor="let product of products">
-              <td data-label="ID">{{ product.id }}</td>
-              <td data-label="Name">{{ product.name }}</td>
-              <td data-label="Stock">{{ product.stock }}</td>
-              <td data-label="Price">${{ product.price }}</td>
+              <td data-label="ID">{{ product.Product_ID }}</td>
+              <td data-label="Name">{{ product.Product_Name }}</td>
+              <td data-label="Stock">{{ product.Stock_Quantity }}</td>
+              <td data-label="Price">${{ product.Price.toFixed(2) }}</td>
             </tr>
           </tbody>
         </table>

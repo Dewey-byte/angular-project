@@ -1,3 +1,4 @@
+import { CheckoutComponent } from './../checkout/checkout';
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { Profile } from './../profile/profile';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
@@ -23,8 +24,9 @@ import Swal from 'sweetalert2';
     NgIf,
     FormsModule,
     CommonModule,
-    NgFor
-  ]
+    NgFor,
+    CheckoutComponent
+]
 })
 export class LandingPage implements AfterViewInit {
 
@@ -35,6 +37,7 @@ export class LandingPage implements AfterViewInit {
   @ViewChild('registerModal') registerModal!: RegisterComponent;
   @ViewChild('cartModal') cartModal!: CartComponent;
   @ViewChild('profileModal') profileModal!: Profile;
+  @ViewChild('checkoutComponent')CheckoutComponent!: CheckoutComponent;
 
   // -------------------------------
   // USER STATE

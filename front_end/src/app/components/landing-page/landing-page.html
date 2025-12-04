@@ -198,6 +198,8 @@
   <!-- ===================== MODALS ===================== -->
   <app-login #loginModal (switchToRegister)="openRegister()"></app-login>
   <app-register #registerModal (switchToLogin)="openLogin()"></app-register>
+  <button (click)="checkoutComponent.openModal()">Checkout Now</button>
+  <app-checkout #checkoutComponent></app-checkout>
   <app-cart #cartModal></app-cart>
   <app-profile #profileModal></app-profile>
 
