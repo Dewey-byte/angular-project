@@ -7,6 +7,7 @@ import { RegisterComponent } from '../register/register.component';
 import { CartComponent } from "../cart/cart";
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-landing-page',
@@ -225,7 +226,12 @@ export class LandingPage implements AfterViewInit {
       this.cartModal?.openCart();
     } catch (err: any) {
       console.error("Add to cart error:", err);
-      alert("Failed to add product to cart.");
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to add item to cart. Please try again.',
+        icon: 'error',
+      });
+
     }
   }
 

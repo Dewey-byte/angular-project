@@ -15,7 +15,7 @@ export class ProductService {
   getProducts(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
-  deleteProduct(id: number): Observable<void> {
+  deleteProduct(id: number): Observable<void> { //admin only
 
     return this.http.delete<void>(`${this.apiUrl}/products/${id}`);
 

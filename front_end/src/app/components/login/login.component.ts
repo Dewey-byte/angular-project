@@ -4,6 +4,8 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule, NgIf } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-login',
@@ -27,6 +29,8 @@ export class LoginComponent {
 
   constructor(private router: Router, private authService: AuthService) {}
 
+
+
   openRegister() {
     this.switchToRegister.emit();
   }
@@ -38,6 +42,10 @@ export class LoginComponent {
   closeModal() {
     this.isOpen = false;
     this.close.emit();
+
+      // Clear credentials when closing modal
+  this.credentials.email = '';
+  this.credentials.password = '';
   }
 
   togglePassword() {
@@ -52,27 +60,41 @@ export class LoginComponent {
 
     this.authService.login(this.credentials).subscribe({
       next: (response) => {
-        alert(response.message || 'Login successful!');
+        Swal.fire({
+          title: 'Login Success!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+
 
         // Save role to localStorage if backend returned it
         if (response.role) {
           localStorage.setItem('role', response.role);
         }
 
-        // ✅ Close modal first, then redirect
+        // 🔥 Load user profile to update user image immediately
+        this.authService.getProfile().subscribe();
+
+        // Close modal
         this.closeModal();
 
-        // Use response.role directly to redirect
+        // Redirect based on role
         setTimeout(() => {
           if (response.role === 'Admin') {
-            this.router.navigate(['/admin']);  // must match your AppRoutingModule
+            this.router.navigate(['/admin']);
+
           } else {
-            this.router.navigate(['/']);       // normal user goes to landing page
+            this.router.navigate(['/']);
           }
-        }, 100); // slight delay ensures modal closes before navigation
+        }, 100);
       },
       error: (err) => {
-        alert(err.error?.message || 'Login failed!');
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong.',
+          icon: 'error',
+        });
+
       }
     });
   }

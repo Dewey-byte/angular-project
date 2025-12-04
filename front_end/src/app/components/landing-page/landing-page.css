@@ -156,8 +156,16 @@
   z-index: 10;
   color: #4f5839;
   text-align: center;
-  padding: 0 1rem; /* padding for mobile screens */
+  padding: 0 1rem;
+
 }
+.hero-content-container{
+  background-color: rgba(240, 240, 240, 0.752);
+  border-radius:10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding:2px 50px;
+}
+
 
 .hero-content h1 {
   font-size: clamp(1.8rem, 5vw, 3rem); /* responsive text */

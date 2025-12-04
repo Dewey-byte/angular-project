@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NgIf } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
@@ -56,12 +57,20 @@ openLogin() {
   register() {
     this.authService.register(this.userData).subscribe({
       next: (response) => {
-        alert(response.message || 'Registration successful!');
+        Swal.fire({
+          title: 'Registration Success!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
         this.closeModal();
         this.router.navigate(['/']);
       },
       error: (err) => {
-        alert(err.error?.message || 'Registration failed!');
+        Swal.fire({
+          title: 'Error!',
+          text: 'Registration Failed',
+          icon: 'error',
+        });
       }
     });
   }

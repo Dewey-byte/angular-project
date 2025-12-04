@@ -37,6 +37,7 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return this.hasToken();
+
   }
 
   logout(): void {
@@ -44,6 +45,7 @@ export class AuthService {
     localStorage.removeItem('image');
     this.loggedIn.next(false);
     this.setUserImage('assets/profile.jpg'); // reset image
+    location.reload();
   }
 
   // ----------------------
