@@ -1,0 +1,301 @@
+/* ============================= */
+/* Products Component CSS - Modern Look */
+/* ============================= */
+
+/* ===== Container ===== */
+.products-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  background-color: #f9fafb; /* lighter neutral background */
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+/* ===== Add / Update Product Button ===== */
+.add-btn {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.add-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+/* ===== Add / Update Product Form ===== */
+.add-product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.add-product-form input,
+.add-product-form textarea,
+.add-product-form select {
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  font-size: 1rem;
+  width: 96%;
+  transition: all 0.2s ease;
+  background-color: #fefefe;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.add-product-form input:focus,
+.add-product-form textarea:focus,
+.add-product-form select:focus {
+  border-color: #6366f1;
+  outline: none;
+  box-shadow: 0 0 8px rgba(99,102,241,0.2);
+}
+
+.add-product-form label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+/* ===== Category Radio Toggle Style ===== */
+.category-options {
+  display: flex;
+  gap: 1rem;
+}
+
+.category-options input[type="radio"] {
+  display: none;
+}
+
+.category-options label {
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #f3f4f6;
+  font-weight: 500;
+}
+
+.category-options input[type="radio"]:checked + label {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* ===== Image Input Unified ===== */
+.image-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.image-input-wrapper input[type="text"] {
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  padding: 0.65rem 1rem;
+  font-size: 1rem;
+}
+
+.image-input-wrapper input[type="file"] {
+  border-radius: 12px;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  border: 1px dashed #d1d5db;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image-input-wrapper input[type="file"]:hover {
+  border-color: #6366f1;
+  box-shadow: 0 0 6px rgba(99,102,241,0.2);
+}
+
+.file-name {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+/* ===== Add Button ===== */
+.add-product-form button {
+  align-self: flex-start;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.7rem 1.5rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.add-product-form button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+.back-btn {
+  background-color: #f3f4f6;
+  color: #374151;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background-color: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+
+/* ===== Table Styling ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  background-color: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+}
+
+thead {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+}
+
+thead th {
+  text-align: left;
+  padding: 1rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+tbody td {
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+tbody tr:hover {
+  background-color: #f9fafb;
+  transition: 0.2s;
+}
+
+/* ===== Product Images ===== */
+.product-image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.product-image-container img {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  object-fit: cover;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.product-image-container:hover img {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ===== Action Buttons ===== */
+tbody button {
+  margin-left: 0.5rem;
+  background-color: #ef4444;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+tbody button:first-child {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+}
+
+tbody button:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+tbody button:first-child:hover {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+}
+
+/* ===== Empty State ===== */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #9ca3af;
+  font-size: 1rem;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  table thead {
+    display: none;
+  }
+
+  table, tbody, tr, td {
+    display: block;
+    width: 100%;
+  }
+
+  tbody tr {
+    margin-bottom: 1rem;
+    border-radius: 16px;
+    background-color: #fff;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6b7280;
+    margin-right: 0.5rem;
+    flex-basis: 35%;
+  }
+
+  img {
+    width: 50px;
+    height: 50px;
+    margin-right: 0.5rem;
+  }
+
+  tbody button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}

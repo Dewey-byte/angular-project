@@ -19,7 +19,7 @@ export class AdminService {
     return this.http.get(`${this.baseURL}/products/${id}`);
   }
 
-  createProduct(product: any): Observable<any> {
+  addProduct(product: any): Observable<any> {
     return this.http.post(`${this.baseURL}/products/`, product);
   }
 
@@ -36,10 +36,10 @@ export class AdminService {
 
   // INVENTORY LOGS
   getInventoryLogs(): Observable<any> {
-    return this.http.get(`${this.baseURL}/inventory-log/`);
+    return this.http.get(`${this.baseURL}/inventory_log/`);
   }
 
   getInventoryLog(id: number): Observable<any> {
-    return this.http.get(`${this.baseURL}/inventory-log/${id}`);
+    return this.http.get(`${this.baseURL}/inventory_log/${id}`);
   }
 }

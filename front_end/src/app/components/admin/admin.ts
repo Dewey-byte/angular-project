@@ -1,7 +1,6 @@
 import { NgIf, NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
 
 interface Product {
@@ -29,7 +28,7 @@ export class AdminPage implements OnInit {
   totalProducts = 0;
   totalOrders = 0;
   lowStockItems = 0;
-  totalRevenue = 0;
+
 
   // Data Arrays
   products: Product[] = [];
@@ -69,7 +68,8 @@ export class AdminPage implements OnInit {
     return new Promise((resolve) => {
       this.adminService.getProducts().subscribe({
         next: (res: Product[]) => {
-          this.products = res;
+          // Ensure price is a number for formatting
+          this.products = res.map(p => ({ ...p, Price: +p.Price }));
           this.totalProducts = res.length;
           this.lowStockItems = res.filter(p => p.Stock_Quantity < 5).length;
           resolve();
@@ -92,8 +92,6 @@ export class AdminPage implements OnInit {
           this.orders = res;
           this.totalOrders = res.length;
 
-          // Compute Total Revenue
-          this.totalRevenue = res.reduce((sum, o) => sum + (o.Total_Amount || 0), 0);
 
           resolve();
         },

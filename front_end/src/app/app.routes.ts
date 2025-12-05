@@ -18,6 +18,7 @@ export const routes: Routes = [
   {path: 'profile', component: Profile}, // profile page
   {path: 'products', component: ProductsComponent}, // products page
   {path: 'checkout', component: CheckoutComponent}, // checkout page
+  { path: 'admin/add-product', component: ProductsComponent },
   { path: 'admin', component: AdminPage, canActivate: [AdminGuard] },
 ];
 

@@ -32,16 +32,9 @@
       </div>
       <div class="text-3xl">⚠️</div>
     </div>
-
-    <div class="summary-card">
-      <div>
-        <p class="text-gray-500 text-sm">TOTAL REVENUE</p>
-        <p class="text-xl font-bold">${{ totalRevenue.toFixed(2) }}</p>
-      </div>
-      <div class="text-3xl">💰</div>
     </div>
 
-  </div>
+
 
   <!-- Tabs -->
   <div class="bg-white rounded shadow tabs mb-6">
@@ -87,7 +80,7 @@
               <td data-label="ID">{{ product.Product_ID }}</td>
               <td data-label="Name">{{ product.Product_Name }}</td>
               <td data-label="Stock">{{ product.Stock_Quantity }}</td>
-              <td data-label="Price">${{ product.Price.toFixed(2) }}</td>
+              <td data-label="Price">₱{{ product.Price.toFixed(2) }}</td>
             </tr>
           </tbody>
         </table>
@@ -106,4 +99,4 @@
     </div>
   </div>
 
-</div>
+

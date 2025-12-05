@@ -1,50 +1,66 @@
-/* Page Layout */
+/* ===== Page Layout ===== */
 .dashboard-container {
-  padding: 1.5rem;
-  background: #f3f4f6;
+  padding: 2rem;
+  background: #f9fafb;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
+  color: #111827;
 }
 
-/* Header */
+/* ===== Header ===== */
 .dashboard-header h1 {
-  font-size: 1.9rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 
 .dashboard-header p {
   color: #6b7280;
-  margin-top: 4px;
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
 }
 
-/* Summary Cards */
+/* ===== Summary Cards ===== */
 .summary-card {
-  background: white;
-  padding: 1.2rem;
-  border-radius: 12px;
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: 0.2s ease-in-out;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .summary-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* Tabs */
+/* ===== Tabs ===== */
+.tabs nav {
+  display: flex;
+  gap: 0.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin-top: 1.5rem;
+}
+
 .tabs nav button {
   flex: 1;
   text-align: center;
-  padding: 12px 0;
+  padding: 0.75rem 0;
   font-weight: 500;
-  transition: 0.2s;
+  font-size: 0.95rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
 }
 
 .tabs nav button:hover {
-  background: #f9fafb;
+  background: #f3f4f6;
 }
 
 .tabs nav .active {
@@ -52,66 +68,77 @@
   color: #3b82f6;
 }
 
-/* Add New Product Button */
+/* ===== Add New Product Button ===== */
 .add-btn {
-  background: #2563eb;
+  display: inline-block;
+  background: #3b82f6;
   color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 500;
-  transition: 0.2s;
+  padding: 0.6rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
 }
 
 .add-btn:hover {
-  background: #1d4ed8;
+  background: #2563eb;
+  transform: translateY(-2px);
 }
 
-/* Empty State */
+/* ===== Empty State ===== */
 .empty-state {
   text-align: center;
-  padding: 2.5rem 0;
+  padding: 3rem 1rem;
   color: #9ca3af;
 }
 
 .empty-state .icon {
-  font-size: 2.5rem;
-  margin-bottom: 8px;
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
 }
 
-/* Product Table */
+/* ===== Product Table ===== */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
-  border-radius: 10px;
+  margin-top: 1.5rem;
+  border-radius: 12px;
   overflow: hidden;
-  background: white;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
 }
 
 thead {
-  background: #f9fafb;
+  background: #f3f4f6;
 }
 
 th {
   text-align: left;
-  padding: 12px;
+  padding: 1rem;
   font-weight: 600;
   font-size: 0.9rem;
   color: #6b7280;
 }
 
 td {
-  padding: 12px;
+  padding: 1rem;
   border-top: 1px solid #e5e7eb;
 }
 
 tbody tr:hover {
-  background: #f3f4f6;
-  transition: 0.15s;
+  background: #f9fafb;
+  transition: background 0.2s;
 }
 
-/* Responsive Table */
+/* ===== Responsive Table ===== */
 @media (max-width: 768px) {
+  table {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
   thead {
     display: none;
   }
@@ -119,17 +146,19 @@ tbody tr:hover {
   table tr {
     display: block;
     margin-bottom: 1rem;
-    border-radius: 10px;
-    background: white;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   }
 
   table td {
     display: flex;
     justify-content: space-between;
-    padding: 10px 12px;
+    padding: 0.5rem 0;
     border: none;
     border-bottom: 1px solid #e5e7eb;
+    font-size: 0.9rem;
   }
 
   table td:last-child {

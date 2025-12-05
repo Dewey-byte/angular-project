@@ -1,21 +1,110 @@
-<h2>Products</h2>
-<table>
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Category</th>
-    <th>Price</th>
-    <th>Stock</th>
-    <th>Actions</th>
-  </tr>
-  <tr *ngFor="let product of products">
-    <td>{{ product.Product_ID }}</td>
-    <td>{{ product.Product_Name }}</td>
-    <td>{{ product.Category }}</td>
-    <td>{{ product.Price }}</td>
-    <td>{{ product.Stock_Quantity }}</td>
-    <td>
-      <button (click)="deleteProduct(product.Product_ID)">Delete</button>
-    </td>
-  </tr>
-</table>
+<div class="products-container">
+  <!-- Add / Edit Product Button -->
+  <button (click)="toggleAddForm()" class="add-btn mb-4">
+    {{ showAddForm ? 'Cancel' : '+ Add New Product' }}
+  </button>
+
+  <!-- Back Button -->
+<button class="back-btn mb-4" routerLink="/admin">
+  ← Back to Admin Page
+</button>
+
+<!-- Add / Update Product Form -->
+<div *ngIf="showAddForm" class="add-product-form mb-4">
+  <label>Product Name</label>
+  <input type="text" [(ngModel)]="newProduct.Product_Name" />
+
+  <label>Category</label>
+  <div class="category-options">
+    <input type="radio" id="cat-books" name="category" value="Books" [(ngModel)]="newProduct.Category" />
+    <label for="cat-books">Books</label>
+
+    <input type="radio" id="cat-stationery" name="category" value="Stationery" [(ngModel)]="newProduct.Category" />
+    <label for="cat-stationery">Stationery</label>
+  </div>
+
+  <label>Stock Quantity</label>
+  <input type="number" [(ngModel)]="newProduct.Stock_Quantity" />
+
+  <label>Price</label>
+  <input type="number" [(ngModel)]="newProduct.Price" step="0.01" />
+
+  <label>Description</label>
+  <textarea
+    [(ngModel)]="newProduct.Description"
+    rows="3"
+    placeholder="Enter product description"
+  ></textarea>
+
+  <!-- Image Input -->
+  <label>Image (URL or File)</label>
+  <div class="image-input-wrapper">
+    <input
+      type="text"
+      placeholder="Enter image URL or choose a file below"
+      [(ngModel)]="newProduct.image_uri"
+      (input)="selectedFile = null"
+    />
+    <input
+      type="file"
+      (change)="onFileSelected($event)"
+      accept="image/*"
+    />
+  </div>
+
+  <!-- Display selected file name -->
+  <div *ngIf="selectedFile">
+    <span>Selected file: {{ selectedFile.name }}</span>
+  </div>
+
+  <!-- Image Preview -->
+  <div *ngIf="newProduct.image_uri">
+    <p>Preview:</p>
+    <img [src]="newProduct.image_uri" alt="Preview Image" width="100" height="100" />
+  </div>
+
+  <button (click)="saveProduct()">
+    {{ selectedProductId ? 'Update Product' : 'Add Product' }}
+  </button>
+</div>
+
+  <!-- Products Table -->
+  <table *ngIf="products.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Stock</th>
+        <th>Price</th>
+        <th>Image</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>{{ product.Product_ID }}</td>
+        <td>{{ product.Product_Name }}</td>
+        <td>{{ product.Category }}</td>
+        <td>{{ product.Stock_Quantity }}</td>
+        <td>₱{{ product.Price.toFixed(2) }}</td>
+        <td>
+          <div class="product-image-container" [ngStyle]="{'--image-url': 'url(' + product.Image_URL + ')'}">
+            <img [src]="product.Image_URL" alt="product image" />
+          </div>
+        </td>
+        <td>{{ product.Description }}</td>
+        <td>
+          <button (click)="toggleAddForm(product)">Edit</button>
+          <button (click)="deleteProduct(product.Product_ID)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Empty State -->
+  <div *ngIf="products.length === 0" class="empty-state">
+    <p>No products yet</p>
+  </div>
+</div>
