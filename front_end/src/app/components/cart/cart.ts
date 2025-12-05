@@ -60,13 +60,34 @@ export class CartComponent {
     });
   }
 
-  updateQuantity(item: any, newQty: number) {
-    if (newQty < 1 || !item.cart_id) return;
-    this.cartService.updateCartItem(item.cart_id, newQty).subscribe({
-      next: () => this.loadCart(),
-    });
-  }
+    // Call when user changes quantity
+    updateQuantity(itemId: number, newQty: number) {
+      const quantity = Number(newQty);
 
+
+      this.cartService.updateCartItem(itemId, newQty).subscribe({
+        next: (res) => {
+          // Success, reload cart
+          this.loadCart();
+        },
+        error: (err) => {
+          // Show alert if stock exceeded
+          if (err.error && err.error.error) {
+            Swal.fire({
+              title: 'Warning',
+              text: err.error.error,
+              icon: 'warning',
+            });
+          } else {
+            Swal.fire({
+              title: 'Error',
+              text: 'Something went wrong updating cart.',
+              icon: 'error',
+            });
+          }
+        }
+      });
+    }
   getTotal() {
     return this.cartItems.reduce((sum, item) => {
       const price = parseFloat(item.Price || 0);

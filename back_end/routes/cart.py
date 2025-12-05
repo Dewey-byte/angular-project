@@ -127,11 +127,20 @@ def add_cart():
 
 
 # ===========================================================
-# UPDATE CART QUANTITY
+# UPDATE CART QUANTITY WITH STOCK CHECK
 # ===========================================================
-@cart.route("/update/<int:cart_id>", methods=["PUT"])
+@cart.route("/update/<int:cart_id>", methods=["PUT", "OPTIONS"])
 @jwt_required()
 def update_cart(cart_id):
+    import traceback
+    from flask import request, jsonify
+    from database.connection import get_db
+    import MySQLdb.cursors
+
+    # Handle preflight OPTIONS for CORS
+    if request.method == "OPTIONS":
+        return '', 200
+
     try:
         # Parse request body
         data = request.get_json()
@@ -145,28 +154,55 @@ def update_cart(cart_id):
             return jsonify({"error": "Quantity must be a number"}), 422
 
         if quantity < 1:
-            return jsonify({"error": "Invalid quantity"}), 422
+            return jsonify({"error": "Quantity must be at least 1"}), 422
 
-        # Update DB
+        # Connect to DB
         db = get_db()
-        cur = db.cursor()
+        cur = db.cursor(MySQLdb.cursors.DictCursor)
+
+        # -------------------------
+        # Get product_id from cart
+        # -------------------------
+        cur.execute("SELECT product_id FROM cart WHERE cart_id=%s", (cart_id,))
+        result = cur.fetchone()
+        if not result:
+            return jsonify({"error": "Cart item not found"}), 404
+        product_id = result["product_id"]
+
+        # -------------------------
+        # Check stock availability
+        # -------------------------
+        cur.execute("SELECT Stock_Quantity FROM products WHERE Product_ID=%s", (product_id,))
+        product = cur.fetchone()
+        if not product:
+            return jsonify({"error": "Product not found"}), 404
+
+        stock = product["Stock_Quantity"]
+
+        if quantity > stock:
+            return jsonify({
+                "error": f"Quantity exceeds available stock ({stock})"
+            }), 400
+
+        # -------------------------
+        # Update cart quantity
+        # -------------------------
         cur.execute(
             "UPDATE cart SET quantity=%s WHERE cart_id=%s",
             (quantity, cart_id)
         )
         db.commit()
 
-        return jsonify({"msg": "Quantity updated"}), 200
+        return jsonify({"msg": "Quantity updated successfully"}), 200
 
     except Exception as e:
         traceback.print_exc()
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": "Internal server error"}), 500
 
     finally:
-        if 'cur' in locals():
-            cur.close()
-        if 'db' in locals():
-            db.close()
+        if 'cur' in locals(): cur.close()
+        if 'db' in locals(): db.close()
+
 
 
 # ===========================================================

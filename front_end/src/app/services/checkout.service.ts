@@ -32,6 +32,6 @@ export class CheckoutService {
   }
 
   placeOrder() {
-    return this.http.post(`${this.api}/cart/checkout`, {}, this.authHeaders());
+    return this.http.post(`${this.api}/place_order`, {}, this.authHeaders());
   }
 }

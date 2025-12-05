@@ -54,7 +54,9 @@
             {{item.name}} x {{item.quantity}} - ₱{{item.price}}
           </li>
         </ul>
-        <p><strong>Total:</strong> ₱{{reviewData.total}}</p>
+
+        <p><strong>Total:</strong> ₱{{ reviewData.total_amount.toFixed(2) }}</p>
+
       </div>
       <div class="modal-buttons">
         <button (click)="prevStep()">Back</button>
@@ -65,9 +67,9 @@
     <!-- STEP 4: Confirmation -->
     <section *ngIf="step === 4">
       <h3>Thank You!</h3>
-      <p>Your order has been placed.</p>
-      <p><strong>Order ID:</strong> {{orderSummary?.id}}</p>
-      <p><strong>Total:</strong> ₱{{orderSummary?.total}}</p>
+      <p>Total: ₱{{ orderSummary.total_amount.toFixed(2) }}</p>
+      <p>Payment Method: {{ orderSummary.payment_method }}</p>
+      <p>{{ orderSummary.message }}</p>
       <button (click)="closeModal()">Close</button>
     </section>
   </div>
