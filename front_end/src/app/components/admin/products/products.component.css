@@ -19,7 +19,7 @@
 
 /* ===== Add / Update Product Button ===== */
 .add-btn {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  background: #737749e3;
   color: #fff;
   padding: 0.7rem 1.5rem;
   border: none;
@@ -62,7 +62,7 @@
 .add-product-form input:focus,
 .add-product-form textarea:focus,
 .add-product-form select:focus {
-  border-color: #6366f1;
+  border-color: #737749e3;
   outline: none;
   box-shadow: 0 0 8px rgba(99,102,241,0.2);
 }
@@ -94,7 +94,7 @@
 }
 
 .category-options input[type="radio"]:checked + label {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  background: #737749e3;
   color: #fff;
   border-color: transparent;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -179,7 +179,7 @@ table {
 }
 
 thead {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  background: linear-gradient(135deg, #737749e3, #5a5d3de3);
   color: #fff;
 }
 
