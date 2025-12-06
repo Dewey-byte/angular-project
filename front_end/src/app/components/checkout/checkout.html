@@ -2,75 +2,86 @@
 <div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()"></div>
 
 <!-- Modal Content -->
-<div class="modal" *ngIf="isModalOpen">
+<div class="modal modern-modal" *ngIf="isModalOpen">
   <div class="modal-header">
     <h2>Checkout</h2>
     <button class="close-btn" (click)="closeModal()">&times;</button>
   </div>
 
   <div class="modal-body">
+
     <!-- STEP 1: Shipping -->
     <section *ngIf="step === 1">
       <h3>Shipping Information</h3>
-      <form (ngSubmit)="saveShipping()">
-        <label>
-          Full Name:
+      <form (ngSubmit)="saveShipping()" class="form-grid">
+
+        <div class="input-field">
+          <label>Full Name</label>
           <input [(ngModel)]="shippingData.full_name" name="full_name" required />
-        </label>
-        <label>
-          Address:
+        </div>
+
+        <div class="input-field">
+          <label>Address</label>
           <input [(ngModel)]="shippingData.address" name="address" required />
-        </label>
-        <label>
-          Phone:
-          <input [(ngModel)]="shippingData.contact_number" name="contacat_number" required />
-        </label>
-        <button type="submit">Next</button>
+        </div>
+
+        <div class="input-field">
+          <label>Phone Number</label>
+          <input [(ngModel)]="shippingData.contact_number" name="contact_number" required />
+        </div>
+
+        <button type="submit" class="primary-btn">Next</button>
       </form>
     </section>
 
     <!-- STEP 2: Payment -->
     <section *ngIf="step === 2">
       <h3>Payment Method</h3>
-      <label>
-        <input type="radio" [(ngModel)]="paymentData.method" value="COD" name="payment" /> Cash on Delivery
+
+      <label class="radio-card">
+        <input type="radio" [(ngModel)]="paymentData.method" value="COD" name="payment" />
+        <span>Cash on Delivery</span>
       </label>
+
       <div class="modal-buttons">
-        <button (click)="prevStep()">Back</button>
-        <button (click)="savePayment()">Next</button>
+        <button class="secondary-btn" (click)="prevStep()">Back</button>
+        <button class="primary-btn" (click)="savePayment()">Next</button>
       </div>
     </section>
 
     <!-- STEP 3: Review -->
     <section *ngIf="step === 3">
       <h3>Review Your Order</h3>
-      <div *ngIf="reviewData">
-        <p><strong>Name:</strong> {{shippingData.full_name}}</p>
-        <p><strong>Address:</strong> {{shippingData.address}}</p>
-        <p><strong>Phone:</strong> {{shippingData.contact_number}}</p>
-        <p><strong>Payment:</strong> {{paymentData.method}}</p>
+
+      <div class="review-box" *ngIf="reviewData">
+        <p><strong>Name:</strong> {{ shippingData.full_name }}</p>
+        <p><strong>Address:</strong> {{ shippingData.address }}</p>
+        <p><strong>Phone:</strong> {{ shippingData.contact_number }}</p>
+        <p><strong>Payment:</strong> {{ paymentData.method }}</p>
+
         <ul>
           <li *ngFor="let item of reviewData.items">
-            {{item.name}} x {{item.quantity}} - ₱{{item.price}}
+            {{item.name}} x {{item.quantity}} — ₱{{item.price}}
           </li>
         </ul>
 
-        <p><strong>Total:</strong> ₱{{ reviewData.total_amount.toFixed(2) }}</p>
-
+        <p class="total"><strong>Total:</strong> ₱{{ reviewData.total_amount.toFixed(2) }}</p>
       </div>
+
       <div class="modal-buttons">
-        <button (click)="prevStep()">Back</button>
-        <button (click)="confirmOrder()">Place Order</button>
+        <button class="secondary-btn" (click)="prevStep()">Back</button>
+        <button class="primary-btn" (click)="confirmOrder()">Place Order</button>
       </div>
     </section>
 
     <!-- STEP 4: Confirmation -->
     <section *ngIf="step === 4">
       <h3>Thank You!</h3>
-      <p>Total: ₱{{ orderSummary.total_amount.toFixed(2) }}</p>
+      <p class="success-total">Total: ₱{{ orderSummary.total_amount.toFixed(2) }}</p>
       <p>Payment Method: {{ orderSummary.payment_method }}</p>
       <p>{{ orderSummary.message }}</p>
-      <button (click)="closeModal()">Close</button>
+      <button class="primary-btn" (click)="closeModal()">Close</button>
     </section>
+
   </div>
 </div>
