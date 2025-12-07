@@ -1,22 +1,18 @@
 from flask import Blueprint, Flask, request, jsonify
 from config import Config
 import mysql.connector
-from routes.inventory_log import log_inventory_change  # Import inventory logging helper
+from routes.inventory_log import log_inventory_change  # Updated helper without Change_Type
 
 app = Flask(__name__)
 products_bp = Blueprint("products", __name__)
 
 # ================= Database connection helper =================
 def get_db_connection():
-    """
-    Establish and return a MySQL database connection using Config settings.
-    """
     conn = mysql.connector.connect(
         host=Config.DB_HOST,
         user=Config.DB_USER,
         password=Config.DB_PASSWORD,
         database=Config.DB_NAME,
-        # optional: if using a very large query
         allow_local_infile=True
     )
     return conn
@@ -24,11 +20,6 @@ def get_db_connection():
 # ================= GET all products =================
 @products_bp.route("/", methods=["GET"])
 def get_products():
-    """
-    Fetch all products from the database.
-    Returns:
-        JSON list of products
-    """
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM products")
@@ -40,10 +31,6 @@ def get_products():
 # ================= GET single product =================
 @products_bp.route("/<int:id>", methods=["GET"])
 def get_product(id):
-    """
-    Fetch a single product by Product_ID.
-    Returns 404 if not found.
-    """
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM products WHERE Product_ID=%s", (id,))
@@ -57,14 +44,9 @@ def get_product(id):
 # ================= CREATE product(s) =================
 @products_bp.route("/", methods=["POST"])
 def create_product():
-    """
-    Create one or multiple products.
-    Accepts single JSON object or a list of JSON objects.
-    Logs initial stock in inventory_log if stock > 0.
-    """
     data = request.get_json()
     if isinstance(data, dict):
-        data = [data]  # wrap single product in a list
+        data = [data]
 
     inserted_products = []
     conn = get_db_connection()
@@ -91,7 +73,7 @@ def create_product():
 
         # --- Inventory logging: initial stock ---
         if stock_qty > 0:
-            log_inventory_change(new_id, "ADD", stock_qty, "Initial stock")
+            log_inventory_change(new_id, stock_qty, "Initial stock")
 
     cursor.close()
     conn.close()
@@ -100,15 +82,10 @@ def create_product():
 # ================= UPDATE product =================
 @products_bp.route("/<int:id>", methods=["PUT"])
 def update_product(id):
-    """
-    Update a product by Product_ID.
-    Logs stock changes in inventory_log if stock quantity changes.
-    """
     data = request.get_json()
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Get current stock before update
     cursor.execute("SELECT Stock_Quantity FROM products WHERE Product_ID=%s", (id,))
     product = cursor.fetchone()
     if not product:
@@ -148,22 +125,16 @@ def update_product(id):
 
     # --- Inventory logging: stock update ---
     if stock_change != 0:
-        change_type = "ADD" if stock_change > 0 else "REMOVE"
-        log_inventory_change(id, change_type, abs(stock_change), "Stock updated")
+        log_inventory_change(id, abs(stock_change), "Stock updated")
 
     return jsonify({"message": "Product updated"}), 200
 
 # ================= DELETE product =================
 @products_bp.route("/<int:id>", methods=["DELETE"])
 def delete_product(id):
-    """
-    Delete a product by Product_ID.
-    Logs stock removal in inventory_log if stock > 0.
-    """
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Get stock to log removal
     cursor.execute("SELECT Stock_Quantity FROM products WHERE Product_ID=%s", (id,))
     product = cursor.fetchone()
     if not product:
@@ -173,31 +144,26 @@ def delete_product(id):
 
     stock_qty = int(product["Stock_Quantity"])
 
+    # --- Inventory logging: product deleted ---
+    if stock_qty > 0:
+        log_inventory_change(id, stock_qty, "Product deleted")
+
     cursor.execute("DELETE FROM products WHERE Product_ID=%s", (id,))
     conn.commit()
     cursor.close()
     conn.close()
-
-    # --- Inventory logging: product deleted ---
-    if stock_qty > 0:
-        log_inventory_change(id, "REMOVE", stock_qty, "Product deleted")
 
     return jsonify({"message": "Product deleted"}), 200
 
 # ================= GET product filters =================
 @products_bp.route("/filters", methods=["GET"])
 def get_product_filters():
-    """
-    Fetch distinct product categories and min/max price for filtering.
-    """
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Categories
     cursor.execute("SELECT DISTINCT Category FROM products")
     categories = [row["Category"] for row in cursor.fetchall()]
 
-    # Price range
     cursor.execute("SELECT MIN(Price) AS min_price, MAX(Price) AS max_price FROM products")
     price_row = cursor.fetchone()
     min_price = float(price_row["min_price"]) if price_row["min_price"] is not None else 0
@@ -215,10 +181,6 @@ def get_product_filters():
 # ================= FILTER products =================
 @products_bp.route("/filter", methods=["GET"])
 def filter_products():
-    """
-    Filter products based on category, min_price, max_price, or search keyword.
-    Query parameters: category, min_price, max_price, search
-    """
     category = request.args.get("category")
     min_price = request.args.get("min_price", type=float)
     max_price = request.args.get("max_price", type=float)

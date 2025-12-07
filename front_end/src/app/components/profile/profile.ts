@@ -46,6 +46,14 @@ export class Profile {
     }
   }
 
+  onContactKeyPress(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
+    if (!/[0-9]/.test(event.key) && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+
   saveProfile() {
     const formData = new FormData();
     formData.append("Full_Name", this.formData.Full_Name);

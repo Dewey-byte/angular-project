@@ -11,6 +11,7 @@ from routes.orders import orders_bp
 from routes.order_details import order_details_bp
 from routes.inventory_log import inventory_log_bp
 from routes.checkout_steps import checkout_steps_bp
+from routes.users import users_bp
 from config import Config
 import os
 
@@ -28,7 +29,7 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:4200"}}, supports_cred
 jwt = JWTManager(app)
 
 # --------------------------- Register Blueprints ---------------------------
-# Each module (auth, user, profile, cart, products, orders, order details, inventory log) 
+# Each module (auth, user, profile, cart, products, orders, order details, inventory log, checkout) 
 # is registered as a blueprint with a URL prefix
 app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(user, url_prefix="/user")
@@ -39,6 +40,7 @@ app.register_blueprint(orders_bp, url_prefix="/orders")
 app.register_blueprint(order_details_bp, url_prefix="/order_details")
 app.register_blueprint(inventory_log_bp, url_prefix="/inventory_log")
 app.register_blueprint(checkout_steps_bp, url_prefix="/checkout")
+app.register_blueprint(users_bp, url_prefix="/users")
 
 # --------------------------- Serve Uploaded Images ---------------------------
 # Ensure the uploads folder exists

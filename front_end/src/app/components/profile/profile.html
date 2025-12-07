@@ -22,8 +22,14 @@
       </div>
       <div *ngIf="editing">
         <input [(ngModel)]="formData.Email" placeholder="Email">
-        <input [(ngModel)]="formData.Contact_Number" placeholder="Contact Number">
-        <input [(ngModel)]="formData.Address" placeholder="Address">
+        <input
+  [(ngModel)]="formData.Contact_Number"
+  placeholder="Contact Number"
+  maxlength="11"
+  (keypress)="onContactKeyPress($event)"
+/>
+
+       <input [(ngModel)]="formData.Address" placeholder="Address">
       </div>
     </div>
 

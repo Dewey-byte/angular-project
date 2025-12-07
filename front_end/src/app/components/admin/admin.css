@@ -65,7 +65,8 @@
 
 .tabs nav .active {
   border-bottom: 3px solid #3b82f6;
-  color: #3b82f6;
+  color: #3b82f6 !important;
+  font-weight: 600;
 }
 
 /* ===== Add New Product Button ===== */
@@ -99,7 +100,7 @@
   margin-bottom: 0.5rem;
 }
 
-/* ===== Product Table ===== */
+/* ===== Tables (Generic for all tabs) ===== */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -130,6 +131,35 @@ td {
 tbody tr:hover {
   background: #f9fafb;
   transition: background 0.2s;
+}
+
+/* ===== USERS TAB SPECIFIC STYLES ===== */
+
+.user-action-btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+}
+
+.user-view-btn {
+  background: #10b981;
+  color: white;
+}
+
+.user-view-btn:hover {
+  background: #059669;
+}
+
+.user-delete-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.user-delete-btn:hover {
+  background: #dc2626;
 }
 
 /* ===== Responsive Table ===== */

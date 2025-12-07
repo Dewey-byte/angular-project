@@ -40,6 +40,7 @@
       <button [class.active]="activeTab === 'products'" (click)="switchTab('products')">Products</button>
       <button [class.active]="activeTab === 'orders'" (click)="switchTab('orders')">Orders</button>
       <button [class.active]="activeTab === 'inventory_logs'" (click)="switchTab('inventory_logs')">Inventory Logs</button>
+      <button [class.active]="activeTab === 'users'" (click)="switchTab('users')">Users</button>
     </nav>
 
     <div class="p-4">
@@ -92,6 +93,7 @@
           <thead>
             <tr>
               <th>Order ID</th>
+              <th>User ID</th>
               <th>Total Amount</th>
               <th>Order Date</th>
               <th>Status</th>
@@ -101,6 +103,7 @@
           <tbody>
             <tr *ngFor="let order of orders">
               <td data-label="Order ID">{{ order.Order_ID }}</td>
+              <td data-label="User ID">{{ order.User_ID }}</td>
               <td data-label="Total Amount">₱{{ order.Total_Amount.toFixed(2) }}</td>
               <td data-label="Order Date">{{ order.Order_Date | date:'medium' }}</td>
               <td data-label="Status">
@@ -116,35 +119,71 @@
 
       </div>
 
-      <!-- INVENTORY LOGS TAB -->
-      <div *ngIf="activeTab === 'inventory_logs'">
+    <!-- INVENTORY LOGS TAB -->
+    <div *ngIf="activeTab === 'inventory_logs'">
+      <div *ngIf="inventoryLogs.length === 0" class="empty-state">
+        <div class="icon">📊</div>
+        <p>No inventory logs yet</p>
+        <p class="text-sm">Logs will appear when stock changes occur</p>
+      </div>
 
-        <div *ngIf="inventoryLogs.length === 0" class="empty-state">
-          <div class="icon">📊</div>
-          <p>No inventory logs yet</p>
-          <p class="text-sm">Logs will appear when stock changes occur</p>
+      <table *ngIf="inventoryLogs.length > 0">
+        <thead>
+          <tr>
+            <th>Log ID</th>
+            <th>Product ID</th>
+            <th>Quantity Changed</th>
+            <th>Remarks</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of inventoryLogs">
+            <td data-label="Log ID">{{ log.Log_ID }}</td>
+            <td data-label="Product ID">{{ log.Product_ID }}</td>
+            <td data-label="Qty Changed">{{ log.Quantity_Changed }}</td>
+            <td data-label="Remarks">{{ log.Remarks }}</td>
+            <td data-label="Date">{{ log.Log_Date | date:'medium' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+      <!-- USERS TAB -->
+      <div *ngIf="activeTab === 'users'">
+
+        <div *ngIf="users.length === 0" class="empty-state">
+          <div class="icon">👤</div>
+          <p>No users found</p>
+          <p class="text-sm">Users will appear once someone registers</p>
         </div>
 
-        <table *ngIf="inventoryLogs.length > 0">
+        <table *ngIf="users.length > 0">
           <thead>
             <tr>
-              <th>Log ID</th>
-              <th>Product</th>
+              <th>User ID</th>
+              <th>Full Name</th>
+              <th>Email</th>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Contact</th>
+              <th>Address</th>
               <th>Action</th>
-              <th>Quantity Changed</th>
-              <th>New Stock</th>
-              <th>Date</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr *ngFor="let log of inventoryLogs">
-              <td data-label="Log ID">{{ log.log_id }}</td>
-              <td data-label="Product">{{ log.product_name }}</td>
-              <td data-label="Action">{{ log.action }}</td>
-              <td data-label="Qty Changed">{{ log.quantity_changed }}</td>
-              <td data-label="New Stock">{{ log.new_stock }}</td>
-              <td data-label="Date">{{ log.timestamp | date:'medium' }}</td>
+            <tr *ngFor="let user of users">
+              <td data-label="User ID">{{ user.User_ID }}</td>
+              <td data-label="Full Name">{{ user.Full_Name }}</td>
+              <td data-label="Email">{{ user.Email }}</td>
+              <td data-label="Username">{{ user.Username }}</td>
+              <td data-label="Role">{{ user.Role }}</td>
+              <td data-label="Contact">{{ user.Contact_Number }}</td>
+              <td data-label="Address">{{ user.Address }}</td>
+              <td data-label="Action">
+                <button class="delete-btn" (click)="deleteUser(user.User_ID)">Delete</button>
+              </td>
             </tr>
           </tbody>
         </table>
