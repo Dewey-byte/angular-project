@@ -125,6 +125,14 @@ def update_order(order_id):
     Total_Amount = data.get("Total_Amount", order["Total_Amount"])
     Order_Status = data.get("Order_Status", order["Order_Status"])
 
+    # Validate status
+    VALID_STATUSES = ["Pending", "Processing", "Shipped", "Completed", "Cancelled"]
+    if Order_Status not in VALID_STATUSES:
+        cursor.close()
+        conn.close()
+        return jsonify({"error": "Invalid order status"}), 400
+
+    # Update order
     sql = """
         UPDATE orders
         SET User_ID = %s,
@@ -132,7 +140,6 @@ def update_order(order_id):
             Order_Status = %s
         WHERE Order_ID = %s
     """
-
     cursor.execute(sql, (User_ID, Total_Amount, Order_Status, order_id))
     conn.commit()
 
@@ -172,3 +179,5 @@ def delete_order(order_id):
     conn.close()
 
     return jsonify({"message": "Order deleted successfully"}), 200
+
+    
