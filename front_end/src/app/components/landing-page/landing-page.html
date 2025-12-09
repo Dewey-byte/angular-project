@@ -2,36 +2,26 @@
 
   <!-- ===================== HEADER ===================== -->
   <header class="header">
-
-    <!-- Logo -->
     <div class="logo">
       <img src="assets/logo.png" alt="LibroTrack Logo" class="logo-img">
       <span class="logo-text">LibroTrack</span>
     </div>
 
-    <!-- Navigation + Profile + Cart -->
     <div class="nav-profile-cart">
-
-      <!-- Navigation Links -->
       <nav class="nav-links">
         <a (click)="scrollToProducts()">Shop</a>
       </nav>
 
-      <!-- Login/Profile/Cart -->
       <div class="profile-cart">
-
-        <!-- Login Button -->
         <button *ngIf="!isLoggedIn" class="logbtn" (click)="openLogin()">Login</button>
 
-        <!-- Profile Image -->
         <div *ngIf="isLoggedIn" class="profile-container" (click)="openProfile()">
           <img [src]="userImage" alt="User" class="profile-pic">
         </div>
 
-        <!-- Cart Button -->
-        <button class="cart-btn" (click)="cartModal.openCart()">🛒</button>
+        <button *ngIf="isLoggedIn" class="order-btn" (click)="openOrderModal()">📜 Orders</button>
 
-
+        <button class="cart-btn" (click)="cartModal?.openCart()">🛒</button>
       </div>
     </div>
   </header>
@@ -39,142 +29,74 @@
   <!-- ===================== HERO SECTION ===================== -->
   <section class="hero">
     <div class="hero-container">
-
       <div class="hero-banner">
         <img src="assets/hero1.png" alt="Hero Image" class="hero-image">
       </div>
-
-      <!-- Content on Top -->
       <div class="hero-content">
-     <div class="hero-content-container">
-        <h1>Welcome to <span>LibroTrack</span></h1>
-        <p>Your smart online bookstore and e-commerce platform.</p>
-      </div>
+        <div class="hero-content-container">
+          <h1>Welcome to <span>LibroTrack</span></h1>
+          <p>Your smart online bookstore and e-commerce platform.</p>
+        </div>
         <button (click)="scrollToProducts()">Start Shopping</button>
-
       </div>
     </div>
-
   </section>
-
-
 
   <!-- ===================== PRODUCTS SECTION ===================== -->
   <section id="products" class="py-16" style="background-color: #737749e3;">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- Section Title -->
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold mb-4" style="color: #1e293b; justify-content: center; align-items: center; display: flex; ">Our Products</h2>
-        <p class="text-lg" style="color: #2b3b52; justify-content: center; align-items: center; display: flex;">
+        <h2 class="text-3xl font-bold mb-4" style="color: #1e293b;">Our Products</h2>
+        <p class="text-lg" style="color: #2b3b52;">
           Carefully selected books and stationery for every reader and writer
         </p>
       </div>
 
-      <!-- ===================== SEARCH & FILTERS ===================== -->
+      <!-- Search & Filters -->
       <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-10">
-
-        <!-- Search Bar -->
-        <input
-          type="text"
-          [(ngModel)]="searchText"
-          (input)="applyFilters()"
-          placeholder="Search products..."
-          class="px-4 py-2 border rounded-lg w-full md:w-1/3"
-        />
-
-        <!-- Category Filter -->
-        <select
-          [(ngModel)]="selectedCategory"
-          (change)="applyFilters()"
-          class="px-4 py-2 border rounded-lg"
-        >
-          <option value="all" >All Categories</option>
+        <input type="text" [(ngModel)]="searchText" (input)="applyFilters()" placeholder="Search products..." class="px-4 py-2 border rounded-lg w-full md:w-1/3"/>
+        <select [(ngModel)]="selectedCategory" (change)="applyFilters()" class="px-4 py-2 border rounded-lg">
+          <option value="all">All Categories</option>
           <option value="Book">📚 Book</option>
           <option value="Stationery">✏️ Stationery</option>
         </select>
-
-        <!-- Price Filter -->
-        <div class="flex gap-2 ">
-          <input
-            type="number"
-            [(ngModel)]="minPrice"
-            (input)="applyFilters()"
-            placeholder="Min ₱"
-            class="px-4 py-2 border rounded-lg w-24"
-          />
-          <input
-            type="number"
-            [(ngModel)]="maxPrice"
-            (input)="applyFilters()"
-            placeholder="Max ₱"
-            class="px-4 py-2 border rounded-lg w-24"
-          />
+        <div class="flex gap-2">
+          <input type="number" [(ngModel)]="minPrice" (input)="applyFilters()" placeholder="Min ₱" class="px-4 py-2 border rounded-lg w-24"/>
+          <input type="number" [(ngModel)]="maxPrice" (input)="applyFilters()" placeholder="Max ₱" class="px-4 py-2 border rounded-lg w-24"/>
         </div>
-
       </div>
 
-      <!-- ===================== PRODUCT GRID ===================== -->
+      <!-- Product Grid -->
       <div *ngIf="paginatedProducts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <div *ngFor="let p of paginatedProducts" class="bg-white rounded-xl shadow p-4 hover:shadow-xl transition">
-
-          <!-- Product Image -->
-          <img
-            [src]="p.image_uri || 'assets/no-image.png'"
-            alt="{{ p.Product_Name }}"
-            class="w-full h-60 object-cover rounded-lg"
-          />
-
-          <!-- Product Info -->
+          <img [src]="p.image_uri || 'assets/no-image.png'" alt="{{ p.Product_Name }}" class="w-full h-60 object-cover rounded-lg"/>
           <h3 class="text-lg font-semibold mt-3">{{ p.Product_Name }}</h3>
           <p class="text-sm text-gray-600 line-clamp-2">{{ p.Description }}</p>
           <div class="text-xl font-bold text-red-500 mt-2">₱{{ p.Price }}</div>
-
-          <!-- Add to Cart Button -->
-          <button
-            (click)="addToCart(p)"
-            class="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-          >
-            Add to Cart
-          </button>
-
+          <button (click)="addToCart(p)" class="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Add to Cart</button>
         </div>
       </div>
 
-     <!-- No Products Found -->
-     <div *ngIf="paginatedProducts.length === 0" class="no-products">
-      <span>🏪</span>
-      <h3>No Products Found</h3>
-      <p>Try adjusting your search or filters.</p>
-    </div>
+      <!-- No Products Found -->
+      <div *ngIf="paginatedProducts.length === 0" class="no-products text-center py-10">
+        <span>🏪</span>
+        <h3>No Products Found</h3>
+        <p>Try adjusting your search or filters.</p>
+      </div>
 
-
-
-      <!-- ===================== PAGINATION ===================== -->
+      <!-- Pagination -->
       <div class="flex justify-center items-center mt-10 space-x-4">
-        <button
-          (click)="prevPage()"
-          [disabled]="currentPage === 1"
-          class="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400 disabled:opacity-50"
-        >
-          Prev
-        </button>
-
+        <button (click)="prevPage()" [disabled]="currentPage === 1" class="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400 disabled:opacity-50">Prev</button>
         <span class="font-medium text-gray-600">Page {{currentPage}} / {{totalPages}}</span>
-
-        <button
-          (click)="nextPage()"
-          [disabled]="currentPage === totalPages"
-          class="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400 disabled:opacity-50"
-        >
-          Next
-        </button>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400 disabled:opacity-50">Next</button>
       </div>
 
     </div>
   </section>
 
-  <!-- ===================== FEATURES SECTION ===================== -->
+  <!-- Features -->
   <section id="about" class="features" style="background-color: #737749e3;">
     <div class="feature">
       <h3>🛒 Browse Products</h3>
@@ -190,17 +112,17 @@
     </div>
   </section>
 
-  <!-- ===================== FOOTER ===================== -->
+  <!-- Footer -->
   <footer class="footer">
     <p>&copy; 2025 LibroTrack | All Rights Reserved.</p>
   </footer>
 
-  <!-- ===================== MODALS ===================== -->
+  <!-- Modals -->
   <app-login #loginModal (switchToRegister)="openRegister()"></app-login>
   <app-register #registerModal (switchToLogin)="openLogin()"></app-register>
-  <button (click)="checkoutComponent.openModal()">Checkout Now</button>
-  <app-checkout #checkoutComponent></app-checkout>
   <app-cart #cartModal></app-cart>
   <app-profile #profileModal></app-profile>
+  <app-checkout #checkoutComponent></app-checkout>
+  <app-orders-history #orderModal></app-orders-history> <!-- Added Order Modal -->
 
 </div>

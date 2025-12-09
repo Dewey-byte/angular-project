@@ -181,3 +181,26 @@ def delete_order(order_id):
     return jsonify({"message": "Order deleted successfully"}), 200
 
     
+# ============================================================
+# GET ALL ORDERS OF A SPECIFIC USER
+# ============================================================
+@orders_bp.route('/user/<int:user_id>', methods=['GET'])
+def get_orders_by_user(user_id):
+    """
+    Fetch all orders belonging to a specific user.
+    Returns:
+        JSON list of orders
+    """
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM orders WHERE User_ID = %s", (user_id,))
+    orders = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({
+        "status": "success",
+        "orders": orders
+    }), 200

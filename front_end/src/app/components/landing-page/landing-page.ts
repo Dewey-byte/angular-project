@@ -1,5 +1,5 @@
 import { CheckoutComponent } from './../checkout/checkout';
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { Profile } from './../profile/profile';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -9,6 +9,9 @@ import { CartComponent } from "../cart/cart";
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { OrderHistoryService } from '../../services/user.order.history.service';
+import { OrdersModalComponent } from '../orders-history/orders-history';
+
 
 @Component({
   selector: 'app-landing-page',
@@ -25,10 +28,11 @@ import Swal from 'sweetalert2';
     FormsModule,
     CommonModule,
     NgFor,
-    CheckoutComponent
-]
+    CheckoutComponent,
+    OrdersModalComponent,
+  ]
 })
-export class LandingPage implements AfterViewInit {
+export class LandingPage implements OnInit, AfterViewInit {
 
   // -------------------------------
   // MODAL REFERENCES
@@ -37,19 +41,15 @@ export class LandingPage implements AfterViewInit {
   @ViewChild('registerModal') registerModal!: RegisterComponent;
   @ViewChild('cartModal') cartModal!: CartComponent;
   @ViewChild('profileModal') profileModal!: Profile;
-  @ViewChild('checkoutComponent')CheckoutComponent!: CheckoutComponent;
+  @ViewChild('checkoutComponent') checkoutComponent!: CheckoutComponent;
+  @ViewChild('orderModal') orderModal!: OrdersModalComponent;
 
   // -------------------------------
   // USER STATE
   // -------------------------------
   isLoggedIn = false;
   userImage: string = 'assets/profile.jpg';
-
-  // -------------------------------
-  // SLIDER VARIABLES (optional)
-  // -------------------------------
-  currentSlide = 0;
-  slides: NodeListOf<HTMLImageElement> = [] as any;
+  userOrders: any[] = [];
 
   // -------------------------------
   // PRODUCTS
@@ -61,7 +61,7 @@ export class LandingPage implements AfterViewInit {
   // -------------------------------
   // FILTER VARIABLES
   // -------------------------------
-  categories: string[] = []; // Categories from backend
+  categories: string[] = [];
   searchText = "";
   selectedCategory = "all";
   minPrice: number | null = null;
@@ -74,36 +74,41 @@ export class LandingPage implements AfterViewInit {
   itemsPerPage = 16;
   totalPages = 1;
 
-  constructor(public auth: AuthService) {}
+  // -------------------------------
+  // ORDER MODAL
+  // -------------------------------
+  selectedOrder: any = null;
+
+  constructor(
+    public auth: AuthService,
+    private orderService: OrderHistoryService
+  ) {}
 
   ngOnInit() {
     // Subscribe to login state
-    this.auth.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
+    this.auth.isLoggedIn$.subscribe(status => {
+      this.isLoggedIn = status;
+      if (status) this.loadUserOrders();
+    });
     this.auth.userImage$.subscribe(img => this.userImage = img);
 
-    // Load categories and min/max prices
+    // Load filters & products
     this.loadFilters();
-
-    // Initial load of products
     this.loadProducts();
   }
 
-  ngAfterViewInit() {
-    // Optional: slider or other view initialization
-  }
+  ngAfterViewInit() {}
 
   // ==========================
-  // LOAD FILTERS FROM BACKEND
+  // LOAD FILTERS
   // ==========================
   loadFilters() {
     fetch(`${this.backendURL}/filters`)
       .then(res => res.ok ? res.json() : Promise.reject(`Server returned ${res.status}`))
       .then((data: any) => {
-        this.categories = data.categories || [];
-        // Set default min/max price to empty
+        this.categories = data?.categories || [];
         this.minPrice = null;
         this.maxPrice = null;
-        console.log("Loaded filters:", data);
       })
       .catch(err => {
         console.error("Error loading filters:", err);
@@ -113,38 +118,21 @@ export class LandingPage implements AfterViewInit {
       });
   }
 
-
   // ==========================
   // APPLY FILTERS
   // ==========================
   applyFilters() {
-    // Ensure min/max are numbers
     this.minPrice = this.parseNumber(this.minPrice);
     this.maxPrice = this.parseNumber(this.maxPrice);
 
-    // Swap if min > max
     if (this.minPrice !== null && this.maxPrice !== null && this.minPrice > this.maxPrice) {
       [this.minPrice, this.maxPrice] = [this.maxPrice, this.minPrice];
     }
 
-    // Ensure category is set
     this.selectedCategory = this.selectedCategory || 'all';
-
-    // Debug
-    console.log("Applying filters:", {
-      search: this.searchText,
-      category: this.selectedCategory,
-      minPrice: this.minPrice,
-      maxPrice: this.maxPrice
-    });
-
-    // Reload products
     this.loadProducts();
   }
 
-  // -------------------------------
-  // HELPER TO PARSE NUMBERS
-  // -------------------------------
   private parseNumber(value: any): number | null {
     if (value === '' || value === null) return null;
     const n = Number(value);
@@ -152,41 +140,36 @@ export class LandingPage implements AfterViewInit {
   }
 
   // ==========================
-  // LOAD PRODUCTS FROM BACKEND
+  // LOAD PRODUCTS
   // ==========================
   loadProducts() {
     const params = new URLSearchParams();
 
-    // Apply search filter
     if (this.searchText?.trim()) params.set('search', this.searchText.trim());
-    // Apply category filter
     if (this.selectedCategory && this.selectedCategory !== 'all') params.set('category', this.selectedCategory);
-    // Apply price filters
     if (this.minPrice !== null) params.set('min_price', String(this.minPrice));
     if (this.maxPrice !== null) params.set('max_price', String(this.maxPrice));
 
     const url = `${this.backendURL}/filter?${params.toString()}`;
-    console.log("Fetching products from URL:", url);
 
     fetch(url)
       .then(res => res.ok ? res.json() : Promise.reject(`Server returned ${res.status}`))
       .then((data: any[]) => {
         this.products = Array.isArray(data) ? data : [];
         this.currentPage = 1;
-        this.totalPages = Math.max(1, Math.ceil(this.products.length / this.itemsPerPage));
         this.paginate();
       })
       .catch(err => {
         console.error("Error fetching products:", err);
         this.products = [];
         this.paginatedProducts = [];
-        this.totalPages = 1;
         this.currentPage = 1;
+        this.totalPages = 1;
       });
   }
 
   // ==========================
-  // PAGINATION METHODS
+  // PAGINATION
   // ==========================
   paginate() {
     this.totalPages = Math.max(1, Math.ceil(this.products.length / this.itemsPerPage));
@@ -229,13 +212,61 @@ export class LandingPage implements AfterViewInit {
       this.cartModal?.openCart();
     } catch (err: any) {
       console.error("Add to cart error:", err);
-      Swal.fire({
-        title: 'Error!',
-        text: 'Failed to add item to cart. Please try again.',
-        icon: 'error',
-      });
-
+      Swal.fire({ title: 'Error!', text: 'Failed to add item to cart.', icon: 'error' });
     }
+  }
+
+  // ==========================
+  // ORDER MODAL METHODS
+  // ==========================
+  openOrderModal() {
+    const token = this.auth.getToken();
+    const userId = this.auth.getUserId();
+
+    if (!token || !userId) {
+      alert("Please log in to view your orders.");
+      return;
+    }
+
+    this.orderService.getUserOrders(userId).subscribe({
+      next: (res: any) => {
+        const orders = res?.orders || []; // <-- always use res.orders
+        console.log("ORDERS:", orders);
+        this.orderModal?.openModal(orders); // pass orders to modal
+      },
+      error: (err) => {
+        console.error("Error loading orders:", err);
+        this.orderModal?.openModal([]); // pass empty array on error
+      }
+    });
+  }
+
+
+
+
+  closeOrderModal() {
+    this.selectedOrder = null;
+  }
+
+  // ==========================
+  // PRELOAD USER ORDERS
+  // ==========================
+  loadUserOrders() {
+    const token = this.auth.getToken();
+    const userId = this.auth.getUserId();
+
+    if (!token || !userId) return;
+
+    this.orderService.getUserOrders(userId).subscribe({
+      next: (res: any) => {
+        console.log("USER ORDERS:", res);
+        this.userOrders = Array.isArray(res?.orders) ? res.orders : res;
+      },
+      error: (err) => {
+        console.error("Error fetching orders:", err);
+        this.userOrders = [];
+      }
+    });
   }
 
   // ==========================
@@ -244,6 +275,7 @@ export class LandingPage implements AfterViewInit {
   openLogin() { this.loginModal?.openModal(); }
   openRegister() { this.registerModal?.openModal(); }
   openProfile() { this.profileModal?.openProfile(); }
+  openCart() { this.cartModal?.openCart(); }
 
   // ==========================
   // SCROLL TO PRODUCTS
@@ -251,5 +283,4 @@ export class LandingPage implements AfterViewInit {
   scrollToProducts() {
     document.getElementById('products')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-
 }

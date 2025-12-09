@@ -1,0 +1,17 @@
+<div *ngIf="isOpen" class="modal-overlay">
+  <div class="modal-content">
+    <h2>Your Orders</h2>
+    <button class="close-btn" (click)="closeModal()">Close</button>
+
+    <div *ngIf="selectedOrder.length > 0; else noOrders">
+      <ul>
+        <li *ngFor="let order of selectedOrder">
+          Order #{{order.id}} | {{order.Order_Date}} | <span [ngClass]="getStatusClass(order.status)">{{order.status}}</span> | {{ formatCurrency(order.total) }}
+        </li>
+      </ul>
+    </div>
+    <ng-template #noOrders>
+      <p>No orders found.</p>
+    </ng-template>
+  </div>
+</div>

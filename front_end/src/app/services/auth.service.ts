@@ -61,12 +61,17 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/login`, credentials, { headers }).pipe(
       tap((res: any) => {
         if (res.token) {
-          // Save JWT
+          // Save JWT token
           this.saveToken(res.token);
 
-          // ⭐ Save ROLE returned from backend (admin / user)
+          // Save role
           if (res.role) {
             localStorage.setItem('role', res.role);
+          }
+
+          // ⭐⭐⭐ SAVE USER_ID FROM BACKEND
+          if (res.user_id) {
+            localStorage.setItem('userId', res.user_id.toString());
           }
 
           // Save user image
@@ -76,6 +81,7 @@ export class AuthService {
       })
     );
   }
+
 
   // ----------------------
   // PROFILE MANAGEMENT
@@ -111,4 +117,10 @@ export class AuthService {
     this.userImageSubject.next(image);
     localStorage.setItem('image', image); // persist locally
   }
+
+  getUserId(): number | null {
+    const storedId = localStorage.getItem('userId');
+    if (!storedId) return null;
+     return Number(storedId);
+}
 }

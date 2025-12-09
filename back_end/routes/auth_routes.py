@@ -42,13 +42,14 @@ def login():
     # Generate JWT token including the role as an additional claim
     token = create_access_token(
         identity=str(user["User_ID"]),
-        additional_claims={"role": user["Role"]}   # Role stored inside JWT
+        additional_claims={"role": user["Role"]}  # Store role in JWT
     )
 
-    # Successful login response
+    # Successful login response + RETURN USER ID
     return jsonify({
         "success": True,
         "token": token,
-        "role": user["Role"],        # Frontend uses this to redirect (admin/user)
+        "role": user["Role"],
+        "user_id": user["User_ID"],     # 👈 Added this line
         "message": "Login successful"
     }), 200
