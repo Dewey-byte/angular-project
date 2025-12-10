@@ -29,7 +29,7 @@ import { OrdersModalComponent } from '../orders-history/orders-history';
     CommonModule,
     NgFor,
     CheckoutComponent,
-    OrdersModalComponent,
+
   ]
 })
 export class LandingPage implements OnInit, AfterViewInit {

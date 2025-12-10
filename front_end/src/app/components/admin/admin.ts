@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
 import { FormsModule } from '@angular/forms';
-import { timestamp } from 'rxjs';
+import Swal from 'sweetalert2';
 
 interface Product {
   Product_ID: number;
@@ -100,16 +100,24 @@ export class AdminPage implements OnInit {
     });
   }
 
-  deleteProduct(productId: number) {
-    if (!confirm('Are you sure you want to delete this product?')) return;
+  async deleteProduct(productId: number) {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'This product will be permanently deleted.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+    });
+
+    if (!result.isConfirmed) return;
+
     this.adminService.deleteProduct(productId).subscribe({
       next: () => {
-        alert('Product deleted successfully');
+        Swal.fire('Deleted!', 'Product deleted successfully.', 'success');
         this.loadProducts();
       },
-      error: (err) => {
-        console.error('Failed to delete product:', err);
-        alert('Failed to delete product');
+      error: () => {
+        Swal.fire('Error', 'Failed to delete product.', 'error');
       }
     });
   }
@@ -143,11 +151,15 @@ export class AdminPage implements OnInit {
       next: () => {
         const order = this.orders.find(o => o.Order_ID === orderId);
         if (order) order.Order_Status = newStatus;
-        alert(`Order ${orderId} status updated to ${newStatus}`);
+
+        Swal.fire(
+          'Status Updated',
+          `Order ${orderId} updated to ${newStatus}`,
+          'success'
+        );
       },
-      error: (err) => {
-        console.error('Failed to update order status:', err);
-        alert('Failed to update order status');
+      error: () => {
+        Swal.fire('Error', 'Failed to update order status.', 'error');
       }
     });
   }
@@ -168,16 +180,24 @@ export class AdminPage implements OnInit {
     });
   }
 
-  deleteInventoryLog(logId: number) {
-    if (!confirm('Are you sure you want to delete this inventory log?')) return;
+  async deleteInventoryLog(logId: number) {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'This log will be removed permanently.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+    });
+
+    if (!result.isConfirmed) return;
+
     this.adminService.deleteInventoryLog(logId).subscribe({
       next: () => {
-        alert('Inventory log deleted successfully');
+        Swal.fire('Deleted!', 'Inventory log deleted successfully.', 'success');
         this.loadInventoryLogs();
       },
-      error: (err) => {
-        console.error('Failed to delete inventory log:', err);
-        alert('Failed to delete inventory log');
+      error: () => {
+        Swal.fire('Error', 'Failed to delete inventory log.', 'error');
       }
     });
   }
@@ -195,7 +215,7 @@ export class AdminPage implements OnInit {
             Role: u[4],
             Contact_Number: u[5],
             Address: u[6],
-            Image: u[7] // optional, if you want to show avatars
+            Image: u[7]
           }));
         } else {
           this.users = [];
@@ -209,17 +229,24 @@ export class AdminPage implements OnInit {
     });
   }
 
-  deleteUser(userId: number): void {
-    if (!confirm('Are you sure you want to delete this user?')) return;
+  async deleteUser(userId: number): Promise<void> {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'This user will be deleted permanently.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete user!',
+    });
+
+    if (!result.isConfirmed) return;
 
     this.adminService.deleteUser(userId).subscribe({
       next: () => {
-        alert('User deleted successfully');
+        Swal.fire('Deleted!', 'User deleted successfully.', 'success');
         this.loadUsers();
       },
-      error: (err) => {
-        console.error('Failed to delete user:', err);
-        alert('Failed to delete user');
+      error: () => {
+        Swal.fire('Error', 'Failed to delete user.', 'error');
       }
     });
   }

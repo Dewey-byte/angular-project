@@ -57,7 +57,7 @@ export class Profile {
   saveProfile() {
     const formData = new FormData();
     formData.append("Full_Name", this.formData.Full_Name);
-    formData.append("Email", this.formData.Email);
+    formData.append("Username", this.formData.Username);
     formData.append("Contact_Number", this.formData.Contact_Number);
     formData.append("Address", this.formData.Address);
 

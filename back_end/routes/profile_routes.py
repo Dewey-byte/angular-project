@@ -97,7 +97,7 @@ def edit_profile():
     user_id = get_jwt_identity()
 
     full_name = request.form.get("Full_Name")
-    email = request.form.get("Email")
+    username = request.form.get("Username")
     contact = request.form.get("Contact_Number")
     address = request.form.get("Address")
 
@@ -122,9 +122,9 @@ def edit_profile():
     cursor = db.cursor()
     cursor.execute("""
         UPDATE Users
-        SET Full_Name=%s, Email=%s, Contact_Number=%s, Address=%s, Image_URL=%s
+        SET Full_Name=%s, Username=%s, Contact_Number=%s, Address=%s, Image_URL=%s
         WHERE User_ID=%s
-    """, (full_name, email, contact, address, image_url, user_id))
+    """, (full_name, username, contact, address, image_url, user_id))
 
     db.commit()
     cursor.close()
